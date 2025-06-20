@@ -115,6 +115,14 @@ export default function Footer() {
                     {t("nav.contact")}
                   </button>
                 </li>
+                <li>
+                  <a
+                    href="/blog"
+                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                  >
+                    {t("nav.blog") || "Blog"}
+                  </a>
+                </li>
               </motion.ul>
             </div>
 

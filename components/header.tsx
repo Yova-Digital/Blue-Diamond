@@ -41,6 +41,12 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <button
+              onClick={() => window.location.href = "/"}
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
+            >
+              {t("nav.home") || "Home"}
+            </button>
+            <button
               onClick={() => scrollToSection("about")}
               className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
             >
@@ -57,6 +63,12 @@ export default function Header() {
               className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
             >
               {t("nav.contact")}
+            </button>
+            <button
+              onClick={() => window.location.href = "/blog"}
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
+            >
+              {t("nav.blog") || "Blog"}
             </button>
           </nav>
 
@@ -98,6 +110,12 @@ export default function Header() {
           >
             <div className="flex flex-col space-y-4">
               <button
+                onClick={() => { window.location.href = "/"; setIsMenuOpen(false); }}
+                className="text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
+              >
+                {t("nav.home") || "Home"}
+              </button>
+              <button
                 onClick={() => scrollToSection("about")}
                 className="text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
               >
@@ -114,6 +132,12 @@ export default function Header() {
                 className="text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
               >
                 {t("nav.contact")}
+              </button>
+              <button
+                onClick={() => { window.location.href = "/blog"; setIsMenuOpen(false); }}
+                className="text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
+              >
+                {t("nav.blog") || "Blog"}
               </button>
             </div>
           </motion.nav>
