@@ -12,9 +12,14 @@ export default function Header() {
   const { language, setLanguage, t } = useLanguage()
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+    // If we're not on the home page, navigate there first
+    if (window.location.pathname !== '/') {
+      window.location.href = `/#${sectionId}`
+    } else {
+      const element = document.getElementById(sectionId)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" })
+      }
     }
     setIsMenuOpen(false)
   }
@@ -41,7 +46,13 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <button
-              onClick={() => window.location.href = "/"}
+              onClick={() => {
+                if (window.location.pathname === '/') {
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                } else {
+                  window.location.href = '/'
+                }
+              }}
               className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
             >
               {t("nav.home") || "Home"}
@@ -110,7 +121,14 @@ export default function Header() {
           >
             <div className="flex flex-col space-y-4">
               <button
-                onClick={() => { window.location.href = "/"; setIsMenuOpen(false); }}
+                onClick={() => { 
+                if (window.location.pathname === '/') {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                  window.location.href = '/';
+                }
+                setIsMenuOpen(false); 
+              }}
                 className="text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
               >
                 {t("nav.home") || "Home"}
