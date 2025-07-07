@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useState, useEffect } from "react"
 
 const translations: Record<string, Record<string, string>> = {
   en: {
@@ -15,13 +15,23 @@ const translations: Record<string, Record<string, string>> = {
     "hero.description": "Empowering Businesses with Tailored Financial Solutions",
     "hero.cta": "Get Started",
     "hero.growthFocused": "Growth Focused",
+    "features.title": "Our Features",
+    "features.subtitle": "Tailored financial solutions designed for your needs",
+    "features.growth.title": "Growth Focused",
+    "features.growth.description": "Strategic financing solutions for business expansion",
+    "features.trusted.title": "Trusted Partner",
+    "features.trusted.description": "30+ years of expertise in UAE financial markets",
+    "features.fast.title": "Fast Execution",
+    "features.fast.description": "Swift approvals and efficient processing",
     "hero.growthDesc": "Strategic financing solutions for business expansion",
     "hero.trustedPartner": "Trusted Partner",
     "hero.trustedDesc": "30+ years of expertise in UAE financial markets",
     "hero.fastExecution": "Fast Execution",
+    "hero.badge" : "Finance Broker",
     "hero.fastDesc": "Swift approvals and efficient processing",
     "hero.secondaryCta": "Register Now",
     "hero.trustedBy": "Trusted by 1000+ businesses",
+    "common.readMore": "Read More",
     "registration.title": "Register Now",
     "registration.fullName": "Full Name",
     "registration.email": "Email",
@@ -103,12 +113,20 @@ const translations: Record<string, Record<string, string>> = {
     "blog.title": "Our Blog",
     "blog.subtitle": "Insights, news, and tips for smarter business finance.",
     "blog.readMore": "Read More",
-    "blog.ctaTitle": "Want to stay updated?",
-    "blog.ctaDesc": "Subscribe to our newsletter for the latest insights and updates.",
+    "blog.publishedOn": "Published on",
+    "blog.by": "By",
+    "blog.minRead": "min read",
+    "blog.featuredPost": "Featured Post",
+    "blog.recentPosts": "Recent Posts",
+    "blog.latestInsights": "Latest Insights",
+    "blog.ctaTitle": "Stay Updated",
+    "blog.ctaSubtitle": "Subscribe to our newsletter for the latest financial insights and updates",
+    "blog.emailPlaceholder": "Enter your email address",
+    "blog.subscribe": "Subscribe",
     "blog.ctaButton": "Subscribe Now",
     "blog.back": "Back to Blog",
     "blog.special": "Featured Insights",
-    "blog.featured": "Featured",
+    "blog.featured": "Featured"
   },
   ar: {
     "nav.about": "من نحن",
@@ -119,9 +137,18 @@ const translations: Record<string, Record<string, string>> = {
     "nav.language": "English",
     "hero.title": "بلو دايموند للوساطة التمويلية",
     "hero.subtitle": "طريقك نحو آفاق جديدة من التمويل الذكي",
+    "hero.badge" : "وسيط تمويل",
     "hero.description": "تمكين الشركات بحلول مالية مخصصة",
     "hero.cta": "ابدأ الآن",
     "hero.growthFocused": "التركيز على النمو",
+    "features.title": "مميزاتنا",
+    "features.subtitle": "نقدم لكم أفضل الحلول التمويلية المصممة خصيصاً لاحتياجاتكم",
+    "features.growth.title": "التركيز على النمو",
+    "features.growth.description": "حلول تمويلية استراتيجية لتوسيع الأعمال",
+    "features.trusted.title": "شريك موثوق",
+    "features.trusted.description": "أكثر من 30 عامًا من الخبرة في الأسواق المالية الإماراتية",
+    "features.fast.title": "تنفيذ سريع",
+    "features.fast.description": "موافقات سريعة ومعالجة فعالة",
     "hero.growthDesc": "حلول تمويلية استراتيجية لتوسيع الأعمال",
     "hero.trustedPartner": "شريك موثوق",
     "hero.trustedDesc": "أكثر من 30 عامًا من الخبرة في الأسواق المالية الإماراتية",
@@ -129,6 +156,7 @@ const translations: Record<string, Record<string, string>> = {
     "hero.fastDesc": "موافقات سريعة ومعالجة فعالة",
     "hero.secondaryCta": "التسجيل الآن",
     "hero.trustedBy": "موثوق به من قبل أكثر من 1000 عملاء",
+    "common.readMore": "اقرأ المزيد",
     "registration.title": "سجل الآن",
     "registration.fullName": "الاسم بالكامل",
     "registration.email": "البريد الإلكتروني",
@@ -207,8 +235,16 @@ const translations: Record<string, Record<string, string>> = {
     "blog.title": "مدونتنا",
     "blog.subtitle": "مقالات، أخبار، ونصائح لتمويل أعمال أكثر ذكاءً.",
     "blog.readMore": "اقرأ المزيد",
-    "blog.ctaTitle": "هل ترغب في البقاء على اطلاع؟",
-    "blog.ctaDesc": "اشترك في النشرة البريدية لأحدث المقالات والتحديثات.",
+    "blog.publishedOn": "نشر في",
+    "blog.by": "بواسطة",
+    "blog.minRead": "دقيقة قراءة",
+    "blog.featuredPost": "المقال المميز",
+    "blog.recentPosts": "المقالات الحديثة",
+    "blog.latestInsights": "أحدث الرؤى",
+    "blog.ctaTitle": "ابقَ على اطلاع",
+    "blog.ctaSubtitle": "اشترك في نشرتنا البريدية للحصول على أحدث الرؤى والتحديثات المالية",
+    "blog.emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "blog.subscribe": "اشترك",
     "blog.ctaButton": "اشترك الآن",
     "blog.back": "العودة للمدونة",
     "blog.special": "مقالات مميزة",
@@ -217,25 +253,53 @@ const translations: Record<string, Record<string, string>> = {
 }
 
 interface LanguageContextProps {
-  language: 'en' | 'ar';
-  setLanguage: React.Dispatch<React.SetStateAction<'en' | 'ar'>>;
-  t: (key: string) => string;
+  language: 'en' | 'ar'
+  currentLanguage: 'en' | 'ar'
+  setLanguage: React.Dispatch<React.SetStateAction<'en' | 'ar'>>
+  t: (key: string) => string
 }
 
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined)
 
+const LANGUAGE_STORAGE_KEY = 'blue-diamond-language';
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<'en' | 'ar'>("en")
+  const [language, setLanguage] = useState<'en' | 'ar'>('en')
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Load language from localStorage on mount
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) as 'en' | 'ar' | null;
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    } else {
+      // Default to Arabic if browser language is Arabic, otherwise English
+      const browserLang = navigator.language.split('-')[0];
+      const defaultLang = browserLang === 'ar' ? 'ar' : 'en';
+      setLanguage(defaultLang);
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, defaultLang);
+    }
+    setIsMounted(true);
+  }, []);
+
+  // Update localStorage when language changes
+  useEffect(() => {
+    if (isMounted) {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+      document.documentElement.lang = language;
+      document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    }
+  }, [language, isMounted]);
 
   const t: (key: string) => string = (key) => {
-    return translations[language][key] || key
+    return translations[language]?.[key] || translations['en'][key] || key;
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, currentLanguage: language, setLanguage, t }}>
       <div className={language === "ar" ? "rtl" : "ltr"} dir={language === "ar" ? "rtl" : "ltr"}>
-        {children}
+        {isMounted ? children : null}
       </div>
     </LanguageContext.Provider>
   )

@@ -7,10 +7,13 @@ import { useState } from "react"
 import RegistrationModal from "./RegistrationModal"
 
 export default function Hero() {
-  const { t } = useLanguage()
+  const { t, currentLanguage } = useLanguage()
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], [0, -100])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  
+  // Check if current language is Arabic
+  const isRTL = currentLanguage === 'ar'
 
   const scrollToContact = () => {
     const element = document.getElementById("contact")
@@ -34,28 +37,28 @@ export default function Hero() {
         <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,white,transparent_70%)] dark:bg-grid-gray-800/5"></div>
       </motion.div>
 
-      <div className="container mx-auto px-4 py-20 relative z-10">
+      <div className={`container mx-auto px-4 py-20 relative z-10 ${isRTL ? 'rtl' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left Column - Content */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="space-y-8 text-center md:text-left"
+              className={`space-y-8 text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
-                className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6"
+                className={`inline-flex items-center my-6 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6 ${isRTL ? 'flex-row-reverse' : ''}`}
               >
-                <Sparkles className="w-4 h-4 mr-2" />
+                <Sparkles className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                 {t("hero.badge") || "Innovative Financial Solutions"}
               </motion.div>
 
               <motion.h1
-                className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight"
+                className="text-5xl font-bold text-gray-900 dark:text-white leading-tight"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
@@ -86,7 +89,7 @@ export default function Hero() {
                 >
                   <span className="relative z-10 flex items-center justify-center">
                     {t("hero.cta")}
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className={`${isRTL ? 'ml-0 mr-2' : 'ml-2'} w-5 h-5 group-hover:translate-x-1 transition-transform transform ${isRTL ? 'rotate-180' : ''}`} />
                   </span>
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-900 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </button>
@@ -112,69 +115,40 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <div className="flex items-center">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 border-2 border-white dark:border-gray-800"></div>
-                    ))}
+                <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''} gap-x-5`}>
+                  <div className={`flex ${isRTL ? 'space-x-reverse' : ''} -space-x-2`}>
+                    {isRTL 
+                      ? ["A", "M", "S", "Y"].map((i) => (
+                          <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 border-2 border-white dark:border-gray-800 flex items-center justify-center font-bold text-white">{i}</div>
+                        ))
+                      : ["Y", "S", "M", "A"].map((i) => (
+                          <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 border-2 border-white dark:border-gray-800 flex items-center justify-center font-bold text-white">{i}</div>
+                        ))
+                    }
                   </div>
-                  <span className="ml-3 text-sm text-gray-600 dark:text-gray-400">
+                  <span className={`${isRTL ? 'mr-3' : 'ml-3'} text-sm text-gray-600 dark:text-gray-400`}>
                     {t("hero.trustedBy") || "Trusted by 1000+ businesses"}
                   </span>
                 </div>
               </motion.div>
             </motion.div>
 
-            {/* Right Column - Feature Cards */}
+            {/* Right Column - Image */}
             <motion.div
-              className="grid gap-6"
+              className="relative"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              {[
-                {
-                  icon: <TrendingUp className="w-6 h-6 text-blue-600" />,
-                  title: t("hero.growthFocused"),
-                  description: t("hero.growthDesc"),
-                  gradient: "from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-900/10"
-                },
-                {
-                  icon: <Shield className="w-6 h-6 text-emerald-600" />,
-                  title: t("hero.trustedPartner"),
-                  description: t("hero.trustedDesc"),
-                  gradient: "from-emerald-50 to-emerald-100 dark:from-emerald-900/30 dark:to-emerald-900/10"
-                },
-                {
-                  icon: <Zap className="w-6 h-6 text-amber-600" />,
-                  title: t("hero.fastExecution"),
-                  description: t("hero.fastDesc"),
-                  gradient: "from-amber-50 to-amber-100 dark:from-amber-900/30 dark:to-amber-900/10"
-                }
-              ].map((feature, index) => (
-                <motion.div
-                  key={index}
-                  className={`p-6 rounded-2xl bg-gradient-to-br ${feature.gradient} border border-gray-100 dark:border-white/10 backdrop-blur-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}
-                  whileHover={{ scale: 1.02 }}
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                >
-                  <div className="flex items-start space-x-4">
-                    <div className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                      {feature.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        {feature.title}
-                      </h3>
-                      <p className="mt-1 text-gray-600 dark:text-gray-300">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+              <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1736319861065-d2ee8bb62c16?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt="Blue Diamond Financial Brokerage"
+                  className="w-full h-auto rounded-2xl"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+              <div className="absolute -top-6 -left-6 w-40 h-40 bg-cyan-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
             </motion.div>
           </div>
         </div>

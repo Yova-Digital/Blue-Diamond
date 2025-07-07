@@ -1,20 +1,35 @@
-"use client"
+'use client';
 
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef, useState } from "react"
-import { useLanguage } from "./language-provider"
-import { Building, RefreshCw, Hammer, Briefcase, ShoppingCart, Ship, RotateCcw, ArrowRight, ArrowUpRight } from "lucide-react"
-import Link from "next/link"
+import { motion } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import { useLanguage } from "./language-provider";
+import Link from "next/link";
+import { Building, RefreshCw, Hammer, Briefcase, ShoppingCart, Ship, RotateCcw, ArrowRight } from "lucide-react";
 
-const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
-  const { t } = useLanguage()
+interface ServiceCardProps {
+  service: {
+    icon: React.ComponentType<{ className?: string }>;
+    title: string;
+    description: string;
+    color: string;
+    slug: string;
+  };
+  index: number;
+  isHovered: number | null;
+  onHover: (index: number | null) => void;
+}
+
+const ServiceCard = ({ service, index, isHovered, onHover }: ServiceCardProps) => {
+  const { t } = useLanguage();
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      className="relative group"
+      viewport={{ once: true }}
+      className={`group relative h-full bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg overflow-hidden transition-all duration-500 ${
+        isHovered === index ? 'scale-[1.02]' : 'hover:scale-[1.01]'
+      }`}
       onMouseEnter={() => onHover(index)}
       onMouseLeave={() => onHover(null)}
     >
@@ -49,22 +64,22 @@ const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
 
           {/* Description */}
           <p className={`
-            transition-colors duration-500 leading-relaxed mb-6
+            transition-colors duration-500 leading-relaxed mb-4
             ${isHovered === index ? 'text-blue-100' : 'text-gray-600 dark:text-gray-300'}
           `}>
             {service.description}
           </p>
-          
+
           <Link 
             href={`/services/${service.slug}`}
-            className={`
-              inline-flex items-center text-sm font-medium transition-all duration-300
-              ${isHovered === index ? 'text-white' : 'text-blue-600 dark:text-blue-400'}
-              group hover:underline
-            `}
+            className={`inline-flex items-center text-sm font-medium transition-colors duration-300 ${
+              isHovered === index 
+                ? 'text-white hover:text-blue-100' 
+                : 'text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300'
+            }`}
           >
-            {t('common.readMore')}
-            <ArrowUpRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
+            {t("services.readMore") || 'Read More'}
+            <ArrowRight className={`w-4 h-4 ml-1 transition-transform ${isHovered === index ? 'group-hover:translate-x-1' : ''}`} />
           </Link>
         </div>
       </div>
@@ -78,66 +93,87 @@ const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
   )
 }
 
-export default function Services() {
+export default function ServicesSection() {
   const { t } = useLanguage()
   const sectionRef = useRef(null)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  })
-  
-  const y = useTransform(scrollYProgress, [0, 1], [0, 100])
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.6, 1], [0, 1, 1, 0.5])
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+    
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, []);
 
-  const services = [
+  type Service = {
+    icon: React.ComponentType<{ className?: string }>;
+    title: string;
+    description: string;
+    color: string;
+    slug: string;
+  }
+
+  const services: Service[] = [
     {
       icon: Building,
-      title: t("services.realEstate"),
-      description: t("services.realEstateDesc"),
+      title: t("services.realEstate") || 'Real Estate Financing',
+      description: t("services.realEstateDesc") || 'Tailored property financing solutions for investors and developers',
       color: "from-blue-500 to-blue-600",
       slug: "real-estate"
     },
     {
       icon: RefreshCw,
-      title: t("services.refinancing"),
-      description: t("services.refinancingDesc"),
+      title: t("services.refinancing") || 'Refinancing Solutions',
+      description: t("services.refinancingDesc") || 'Optimize your existing loans and credit facilities',
       color: "from-emerald-500 to-teal-600",
       slug: "refinancing"
     },
     {
       icon: Hammer,
-      title: t("services.construction"),
-      description: t("services.constructionDesc"),
+      title: t("services.construction") || 'Construction Finance',
+      description: t("services.constructionDesc") || 'Specialized financing for construction and development projects',
       color: "from-amber-500 to-orange-600",
       slug: "construction"
     },
     {
       icon: Briefcase,
-      title: t("services.corporate"),
-      description: t("services.corporateDesc"),
+      title: t("services.corporate") || 'Corporate Financing',
+      description: t("services.corporateDesc") || 'Comprehensive financing solutions for businesses of all sizes',
       color: "from-purple-500 to-indigo-600",
       slug: "corporate"
     },
     {
       icon: ShoppingCart,
-      title: t("services.acquisition"),
-      description: t("services.acquisitionDesc"),
+      title: t("services.acquisition") || 'Business Acquisition',
+      description: t("services.acquisitionDesc") || 'Financing solutions for business acquisitions and mergers',
       color: "from-rose-500 to-pink-600",
       slug: "acquisition"
     },
     {
       icon: Ship,
-      title: t("services.trade"),
-      description: t("services.tradeDesc"),
+      title: t("services.trade") || 'Trade Finance',
+      description: t("services.tradeDesc") || 'Solutions for importers and exporters',
       color: "from-cyan-500 to-blue-600",
       slug: "trade"
     },
     {
       icon: RotateCcw,
-      title: t("services.restructuring"),
-      description: t("services.restructuringDesc"),
+      title: t("services.restructuring") || 'Debt Restructuring',
+      description: t("services.restructuringDesc") || 'Solutions for managing and restructuring business debt',
       color: "from-violet-500 to-purple-600",
       slug: "restructuring"
     },
@@ -188,9 +224,15 @@ export default function Services() {
         </div>
 
         {/* CTA Section */}
-        <motion.div 
-          style={{ y, opacity }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ 
+            opacity: isVisible ? 1 : 0,
+            y: isVisible ? 0 : 20 
+          }}
+          transition={{ duration: 0.5 }}
           className="mt-24 text-center"
+          ref={containerRef}
         >
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-800 rounded-3xl shadow-2xl transform -skew-y-1"></div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useLanguage } from './language-provider';
 
@@ -49,24 +49,39 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
     }
   };
 
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = '15px'; // Prevent content shift when scrollbar disappears
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center p-4 text-center">
+    <div className="fixed inset-0 z-[100] overflow-y-auto">
+      <div className="flex min-h-screen items-start md:items-center justify-center p-4 pt-20 md:pt-4 text-center">
         <div 
           className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
           onClick={onClose}
+          aria-hidden="true"
         />
         
-        <div className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
-          <div className="flex justify-between items-center mb-6">
+        <div className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all mx-auto my-8">
+          <div className="flex justify-between items-center mb-6 sticky top-0 bg-white dark:bg-gray-800 py-2 -mx-6 px-6 border-b border-gray-200 dark:border-gray-700">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
               {t('registration.title') || 'Register Now'}
             </h3>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 p-1 -mr-2"
+              aria-label="Close"
             >
               <X className="h-6 w-6" />
             </button>
