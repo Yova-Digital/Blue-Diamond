@@ -7,50 +7,55 @@ import { Building, RefreshCw, Hammer, Briefcase, ShoppingCart, Ship, RotateCcw, 
 import Link from "next/link"
 
 const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+  const isRTL = language === 'ar'
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       viewport={{ once: true, margin: "-50px" }}
-      className="relative group"
+      className="relative group h-full"
       onMouseEnter={() => onHover(index)}
       onMouseLeave={() => onHover(null)}
     >
       <div className={`
-        relative z-10 h-full p-8 rounded-3xl overflow-hidden transition-all duration-500
+        relative z-10 h-full flex flex-col rounded-3xl overflow-hidden transition-all duration-500
         ${isHovered === index ? 'bg-white dark:bg-gray-800 shadow-2xl scale-105' : 'bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm'}
         border border-gray-100 dark:border-gray-700
       `}>
-        {/* Animated background */}
-        <div className={`
-          absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 
-          transition-opacity duration-500 ${service.color.replace('from-', 'from-').replace('to-', 'to-')}
-        `}></div>
+        {/* Service Image */}
+        <div className="relative h-48 overflow-hidden">
+          <img 
+            src={service.image} 
+            alt={service.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div className={`absolute inset-0 ${service.color.replace('/80', '/60')} mix-blend-multiply`}></div>
+          {/* Icon Overlay */}
+          <div className={`
+            absolute -bottom-6 right-6 w-16 h-16 rounded-2xl flex items-center justify-center 
+            text-white transition-all duration-500 ${isHovered === index ? 'bg-white text-gray-800' : service.color.replace('/80', '')}
+            shadow-lg group-hover:shadow-xl
+          `}>
+            <service.icon className={`w-8 h-8 transition-all duration-500 ${isHovered === index ? 'scale-110' : ''}`} />
+          </div>
+        </div>
         
         {/* Content */}
-        <div className="relative z-10">
-          {/* Icon */}
-          <div className={`
-            w-16 h-16 mb-6 rounded-2xl flex items-center justify-center 
-            transition-all duration-500 ${isHovered === index ? 'bg-white text-blue-600' : `text-white ${service.color} bg-gradient-to-r`}
-          `}>
-            <service.icon className={`w-8 h-8 transition-transform duration-500 ${isHovered === index ? 'scale-110' : ''}`} />
-          </div>
-
+        <div className="relative z-10 p-6 pt-8 flex-1 flex flex-col">
           {/* Title */}
           <h3 className={`
-            text-xl font-bold mb-4 leading-tight transition-colors duration-500
-            ${isHovered === index ? 'text-white' : 'text-gray-900 dark:text-white'}
+            text-xl font-bold mb-3 leading-tight transition-colors duration-500
+            ${isHovered === index ? 'text-gray-900 dark:text-white' : 'text-gray-900 dark:text-white'}
           `}>
             {service.title}
           </h3>
 
           {/* Description */}
           <p className={`
-            transition-colors duration-500 leading-relaxed mb-6
-            ${isHovered === index ? 'text-blue-100' : 'text-gray-600 dark:text-gray-300'}
+            transition-colors duration-500 leading-relaxed mb-6 flex-1
+            ${isHovered === index ? 'text-gray-600 dark:text-gray-300' : 'text-gray-600 dark:text-gray-300'}
           `}>
             {service.description}
           </p>
@@ -58,20 +63,20 @@ const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
           <Link 
             href={`/services/${service.slug}`}
             className={`
-              inline-flex items-center text-sm font-medium transition-all duration-300
-              ${isHovered === index ? 'text-white' : 'text-blue-600 dark:text-blue-400'}
-              group hover:underline
+              inline-flex items-center text-sm font-medium transition-all duration-300 mt-auto
+              ${isHovered === index ? 'text-blue-600 dark:text-blue-400' : 'text-blue-600 dark:text-blue-400'}
+              group hover:underline self-start
             `}
           >
             {t('common.readMore')}
-            <ArrowUpRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowUpRight className={`w-4 h-4 ${isRTL ? 'mr-1' : 'ml-1'} group-hover:translate-x-0.5 transition-transform`} />
           </Link>
         </div>
       </div>
       
       {/* Decorative element */}
       <div className={`
-        absolute -inset-1 rounded-3xl bg-gradient-to-r ${service.color} 
+        absolute -inset-1 rounded-3xl bg-gradient-to-r ${service.color.replace('/80', '')} 
         opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500 -z-10
       `}></div>
     </motion.div>
@@ -96,50 +101,57 @@ export default function Services() {
       icon: Building,
       title: t("services.realEstate"),
       description: t("services.realEstateDesc"),
-      color: "from-blue-500 to-blue-600",
-      slug: "real-estate"
+      color: "from-blue-400/80 to-blue-500/80",
+      slug: "real-estate",
+      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80"
     },
     {
       icon: RefreshCw,
       title: t("services.refinancing"),
       description: t("services.refinancingDesc"),
-      color: "from-emerald-500 to-teal-600",
-      slug: "refinancing"
+      color: "from-emerald-400/80 to-teal-500/80",
+      slug: "refinancing",
+      image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80"
     },
     {
       icon: Hammer,
       title: t("services.construction"),
       description: t("services.constructionDesc"),
-      color: "from-amber-500 to-orange-600",
-      slug: "construction"
+      color: "from-amber-400/80 to-orange-500/80",
+      slug: "construction",
+      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
     },
     {
       icon: Briefcase,
       title: t("services.corporate"),
       description: t("services.corporateDesc"),
-      color: "from-purple-500 to-indigo-600",
-      slug: "corporate"
+      color: "from-purple-400/80 to-indigo-500/80",
+      slug: "corporate",
+      image: "https://images.unsplash.com/photo-1709400628079-5960a9f2ded6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Q29ycG9yYXRlJTIwRmluYW5jZSUyMCUyNiUyMFdvcmtpbmclMjBDYXBpdGFsJTIwRmFjaWxpdGllc3xlbnwwfHwwfHx8MA%3D%3D"
     },
     {
       icon: ShoppingCart,
       title: t("services.acquisition"),
       description: t("services.acquisitionDesc"),
-      color: "from-rose-500 to-pink-600",
-      slug: "acquisition"
+      color: "from-rose-400/80 to-pink-500/80",
+      slug: "acquisition",
+      image: "https://images.unsplash.com/photo-1618044733300-9472054094ee?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fEJ1c2luZXNzJTIwQWNxdWlzaXRpb24lMjBGaW5hbmNlfGVufDB8fDB8fHww"
     },
     {
       icon: Ship,
       title: t("services.trade"),
       description: t("services.tradeDesc"),
-      color: "from-cyan-500 to-blue-600",
-      slug: "trade"
+      color: "from-cyan-400/80 to-blue-500/80",
+      slug: "trade",
+      image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
     },
     {
       icon: RotateCcw,
       title: t("services.restructuring"),
       description: t("services.restructuringDesc"),
-      color: "from-violet-500 to-purple-600",
-      slug: "restructuring"
+      color: "from-violet-400/80 to-purple-500/80",
+      slug: "restructuring",
+      image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
     },
   ]
 

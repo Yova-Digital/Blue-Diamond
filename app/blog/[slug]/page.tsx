@@ -15,115 +15,533 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
 
-// Mock comments data
-const comments = [
-  {
-    id: 1,
-    author: "Ahmed Khalid",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
-    date: "2 days ago",
-    content: "This is a very insightful article! I've been following these trends and it's great to see them all summarized here.",
-    replies: [
-      {
-        id: 2,
-        author: "Sara Ahmed",
-        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        date: "1 day ago",
-        content: "I completely agree, Ahmed. The section on digital transformation was particularly interesting."
-      }
-    ]
-  },
-  {
-    id: 3,
-    author: "Mohammed Ali",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
-    date: "3 days ago",
-    content: "Great read! Do you have any recommendations for resources to learn more about blockchain in finance?",
-    replies: []
-  }
-];
-
 const blogs = [
-  {
-    slug: "future-of-corporate-finance-uae",
-    title: "The Future of Corporate Finance in the UAE",
-    description: "Explore the latest trends and opportunities shaping the financial landscape for businesses in the UAE.",
-    date: "June 1, 2024",
-    readTime: "8 min read",
-    author: "Blue Diamond Team",
-    authorImage: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
-    category: "Finance",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    content: `# The Future of Corporate Finance in the UAE
-
-Corporate finance in the UAE is undergoing a remarkable transformation, driven by technological innovation, regulatory changes, and shifting market dynamics. As we look ahead, several key trends are emerging that will shape the financial landscape for businesses in the region.
-
-## Digital Transformation in Finance
-
-The UAE's commitment to becoming a global fintech hub is revolutionizing corporate finance. Blockchain technology, artificial intelligence, and automation are streamlining financial operations, reducing costs, and improving accuracy.
-
-## New Funding Opportunities
-
-Alternative financing options are gaining traction, including:
-
-- **Sukuk and Islamic finance instruments**
-- **Venture capital and private equity**
-- **Crowdfunding platforms**
-- **Government-backed funding initiatives**
-
-## Regulatory Evolution
-
-The UAE's regulatory framework continues to evolve to support business growth while ensuring financial stability. Recent changes include:
-
-- Enhanced corporate governance requirements
-- Stricter anti-money laundering (AML) regulations
-- New bankruptcy and insolvency laws
-
-## Strategic Considerations for Businesses
-
-To thrive in this evolving landscape, businesses should:
-
-1. Embrace digital financial tools and platforms
-2. Diversify funding sources
-3. Stay informed about regulatory changes
-4. Invest in financial talent and training
-
-## Looking Ahead
-
-The future of corporate finance in the UAE is bright, with innovation and growth opportunities across sectors. By staying agile and informed, businesses can position themselves for success in this dynamic environment.`,
-    tags: ["Finance", "UAE", "Corporate Finance", "Trends"]
-  },
   {
     slug: "how-to-secure-business-loans-uae",
     title: "How to Secure Business Loans: A Step-by-Step Guide",
     description: "A comprehensive guide to help you navigate the process of securing business loans in the UAE.",
     date: "May 20, 2024",
-    readTime: "6 min read",
+    readTime: "7 min read",
     author: "Finance Experts",
     authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
     category: "Loans",
-    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    content: `# How to Secure Business Loans: A Step-by-Step Guide
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    content: `# How to Secure Business Loans in the UAE: A Step-by-Step Guide
 
-Securing a business loan in the UAE requires careful planning and preparation. This comprehensive guide will walk you through the entire process, from assessing your needs to receiving funding.
+Securing a business loan in the UAE can be a straightforward process when you understand the requirements and prepare accordingly. This comprehensive guide will walk you through each step to increase your chances of approval.
 
-## Understanding Your Options
+## Understanding Business Loan Options in the UAE
 
-Before applying, understand the different types of business loans available:
+### 1. Types of Business Loans Available
+- **Term Loans**: Fixed amount with regular repayments
+- **Working Capital Loans**: For daily operational expenses
+- **Equipment Financing**: Specifically for purchasing business equipment
+- **Commercial Mortgages**: For property purchases
+- **Islamic Financing**: Sharia-compliant financing options
 
-- **Term loans** - Fixed amount with regular repayments
-- **Working capital loans** - For daily operations
-- **Equipment financing** - For purchasing business equipment
-- **Commercial mortgages** - For property purchases
+### 2. Eligibility Criteria
+- Minimum business operating period (usually 6-12 months)
+- Minimum annual revenue requirements
+- Business plan and financial projections
+- Personal and business credit history
 
-## Step 1: Assess Your Needs
+## Step 1: Assess Your Business Needs
 
-Determine exactly how much funding you need and what it will be used for. Lenders will want to see a clear purpose for the loan.
+### Determine Loan Purpose
+- Clearly define how you'll use the funds
+- Calculate the exact amount needed
+- Consider the loan tenure that suits your cash flow
 
-## Step 2: Check Your Credit Score
+### Evaluate Your Financial Position
+- Review your credit score
+- Prepare financial statements
+- Calculate your debt-to-income ratio
 
-Your personal and business credit scores significantly impact loan approval and interest rates. Obtain your credit report and address any issues before applying.`,
-    tags: ["Loans", "Business Finance", "UAE"]
+## Step 2: Prepare Required Documentation
+
+### Business Documents
+- Trade license copy
+- Memorandum of Association (MOA)
+- Chamber of Commerce registration
+- Bank statements (6-12 months)
+- Audited financial statements
+
+### Personal Documents
+- Passport and visa copies
+- Emirates ID
+- Personal bank statements
+- Proof of address
+
+## Step 3: Compare Lenders
+
+### Traditional Banks
+- Lower interest rates
+- Stringent requirements
+- Longer processing times
+
+### Digital Lenders
+- Faster approval process
+- More flexible requirements
+- Potentially higher interest rates
+
+### Government-Backed Programs
+- Khalifa Fund for Enterprise Development
+- Mohammed Bin Rashid Fund for SME
+- Dubai SME 100
+
+## Step 4: Submit Your Application
+
+### Complete the Application Form
+- Provide accurate information
+- Double-check all details
+- Include all required documents
+
+### Prepare for the Interview
+- Be ready to discuss your business plan
+- Explain how you'll use the loan
+- Demonstrate repayment capability
+
+## Step 5: Understand the Terms
+
+### Key Loan Terms to Review
+- Interest rates (fixed vs. variable)
+- Repayment schedule
+- Processing fees and other charges
+- Prepayment penalties
+- Collateral requirements
+
+## Step 6: Loan Disbursement
+
+### After Approval
+- Review the loan agreement carefully
+- Understand all terms and conditions
+- Sign the agreement
+- Receive funds in your business account
+
+## Tips for Improving Approval Chances
+
+### Build a Strong Credit Profile
+- Maintain good credit history
+- Pay existing loans on time
+- Keep credit utilization low
+
+### Strengthen Your Application
+- Prepare a solid business plan
+- Show consistent revenue
+- Offer collateral if possible
+- Maintain a good banking relationship
+
+## Common Mistakes to Avoid
+
+### Application Errors
+- Incomplete applications
+- Inaccurate information
+- Missing documents
+- Not checking credit report beforehand
+
+### Financial Mistakes
+- Applying for too much or too little
+- Not comparing multiple offers
+- Ignoring the fine print
+- Taking on more debt than you can handle
+
+## Conclusion
+
+Securing a business loan in the UAE requires careful planning and preparation. By following these steps and presenting a strong application, you can significantly improve your chances of approval. Remember to borrow responsibly and ensure that the loan terms align with your business's financial capabilities and growth plans.`,
+    tags: ["Business Loans", "UAE", "Financing", "SME"]
+  },
+  {
+    slug: "future-of-corporate-finance-uae",
+    title: "The Future of Corporate Finance in the UAE",
+    description: "Explore the latest trends and opportunities shaping the financial landscape for businesses in the UAE.",
+    date: "June 1, 2024",
+    readTime: "7 min read",
+    author: "Blue Diamond Team",
+    authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
+    category: "Finance",
+    image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2065&q=80",
+    content: `# The Future of Corporate Finance in the UAE
+
+The United Arab Emirates continues to be a global hub for business and finance, with corporate finance practices evolving rapidly to meet the demands of a dynamic economic landscape. This article explores the key trends and innovations shaping the future of corporate finance in the UAE.
+
+## 1. Digital Transformation in Corporate Finance
+
+### Blockchain and Smart Contracts
+- Implementation of blockchain for secure and transparent transactions
+- Smart contracts automating financial agreements
+- Reduced processing times and increased efficiency
+
+### Artificial Intelligence and Automation
+- AI-powered financial analysis and forecasting
+- Automated invoice processing and reconciliation
+- Enhanced risk assessment models
+
+## 2. Sustainable Finance Initiatives
+
+### Green Bonds and ESG Investing
+- Growth of green bond markets in the UAE
+- Integration of Environmental, Social, and Governance (ESG) factors
+- Sustainable project financing opportunities
+
+### Renewable Energy Financing
+- Investments in solar and wind energy projects
+- Innovative financing models for sustainability initiatives
+- Government incentives for green finance
+
+## 3. Regulatory Developments
+
+### Corporate Tax Implementation
+- Impact of the new corporate tax regime
+- Compliance requirements for businesses
+- Tax planning strategies for corporations
+
+### Anti-Money Laundering (AML) Regulations
+- Enhanced due diligence requirements
+- Technology solutions for AML compliance
+- Cross-border regulatory cooperation
+
+## 4. Fintech Innovation
+
+### Digital Payment Solutions
+- Growth of mobile and contactless payments
+- Digital wallets and payment platforms
+- Cross-border payment innovations
+
+### Open Banking
+- API-driven financial services
+- Enhanced customer data sharing
+- New business models in corporate banking
+
+## 5. Economic Diversification and Growth Sectors
+
+### Technology and Innovation Hubs
+- Dubai International Financial Centre (DIFC) developments
+- Abu Dhabi Global Market (ADGM) initiatives
+- Funding opportunities for tech startups
+
+### Healthcare and Life Sciences
+- Investment in healthcare infrastructure
+- Medical tourism financing
+- Pharmaceutical and biotech funding
+
+## 6. Risk Management in Volatile Markets
+
+### Currency and Commodity Risk
+- Hedging strategies for currency fluctuations
+- Impact of oil price volatility
+- Diversification approaches
+
+### Cybersecurity in Finance
+- Protecting financial data and transactions
+- Regulatory requirements for cybersecurity
+- Best practices for financial institutions
+
+## 7. The Role of Family Businesses
+
+### Succession Planning
+- Transition to next-generation leadership
+- Professionalization of family businesses
+- Governance structures
+
+### Access to Capital
+- Alternative financing options
+- Private equity and venture capital
+- Capital market solutions
+
+## 8. Future Outlook
+
+The corporate finance landscape in the UAE is poised for continued transformation, driven by technological innovation, regulatory changes, and economic diversification. Businesses that adapt to these changes and leverage new opportunities will be well-positioned for success in the evolving financial ecosystem of the UAE.`,
+    tags: ["Corporate Finance", "UAE", "Banking", "Fintech"]
+  },
+  {
+    slug: "top-investment-strategies-2024",
+    title: "Top Investment Strategies for 2024",
+    description: "Discover the most promising investment opportunities and strategies for the coming year.",
+    date: "April 28, 2024",
+    readTime: "8 min read",
+    author: "Investment Team",
+    authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
+    category: "Investing",
+    image: "https://images.unsplash.com/photo-1649817597237-68ad822141e6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHRvcCUyMGludmVzdHxlbnwwfHwwfHx8MA%3D%3D",
+    content: `# Top Investment Strategies for 2024
+
+As we navigate through 2024, investors are facing a rapidly changing financial landscape. This guide outlines the most promising investment strategies to consider in the current market environment.
+
+## 1. Technology and AI Growth Stocks
+
+Technology continues to be a driving force in the market, with artificial intelligence leading the charge. Consider:
+
+- **AI and machine learning companies**
+- **Cloud computing services**
+- **Cybersecurity firms**
+- **Semiconductor manufacturers**
+
+## 2. Sustainable and ESG Investing
+
+Environmental, Social, and Governance (ESG) investing is no longer a trend but a necessity. Focus on:
+
+- Renewable energy companies
+- Green bonds
+- Socially responsible funds
+- Companies with strong governance practices
+
+## 3. Emerging Markets
+
+Emerging markets present significant growth potential, particularly in:
+
+- Southeast Asia's digital economy
+- African fintech innovations
+- Latin American e-commerce
+- Middle East renewable energy projects
+
+## 4. Real Estate Investment Trusts (REITs)
+
+REITs offer exposure to real estate markets with greater liquidity. Consider:
+
+- Industrial and logistics properties
+- Data center REITs
+- Healthcare facilities
+- Residential rental properties
+
+## 5. Fixed Income and Bonds
+
+With interest rates stabilizing, fixed income investments are becoming attractive:
+
+- Short-duration bonds
+- Corporate bonds with strong credit ratings
+- Municipal bonds for tax advantages
+- Inflation-protected securities
+
+## Risk Management Strategies
+
+Remember to diversify your portfolio and consider:
+
+- Asset allocation based on risk tolerance
+- Regular portfolio rebalancing
+- Dollar-cost averaging
+- Setting clear investment goals
+
+By implementing these strategies and staying informed about market developments, investors can position themselves for success in 2024 and beyond.`,
+    tags: ["Investing", "Stocks", "ESG", "2024 Trends"]
+  },
+  {
+    slug: "rise-of-digital-banking-middle-east",
+    title: "The Rise of Digital Banking in the Middle East",
+    description: "How digital transformation is reshaping the banking sector in the Middle East region.",
+    date: "April 15, 2024",
+    readTime: "6 min read",
+    author: "Tech Finance",
+    authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
+    category: "Banking",
+    image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    content: `# The Rise of Digital Banking in the Middle East
+
+The Middle East is experiencing a digital banking revolution, transforming how consumers and businesses manage their finances. This article explores the key developments and future outlook for digital banking in the region.
+
+## Current Landscape
+
+### Growth Drivers
+- High smartphone penetration rates
+- Young, tech-savvy population
+- Government support for fintech innovation
+- Increasing demand for convenient banking solutions
+
+### Key Players
+- **Neobanks**: Digital-only banks gaining traction
+- **Traditional Banks**: Rapidly digitizing their services
+- **Fintech Startups**: Innovating with new financial solutions
+
+## Technological Innovations
+
+### 1. Mobile-First Banking
+- Feature-rich mobile apps
+- Biometric authentication
+- AI-powered customer service
+
+### 2. Open Banking
+- Secure data sharing between institutions
+- Personalized financial products
+- Improved customer experience
+
+### 3. Blockchain and Security
+- Enhanced transaction security
+- Faster cross-border payments
+- Reduced operational costs
+
+## Regional Focus
+
+### UAE
+- Dubai International Financial Centre (DIFC) fintech hub
+- Regulatory sandbox for innovation
+- Smart Dubai initiative
+
+### Saudi Arabia
+- Vision 2030 digital transformation goals
+- Saudi Central Bank fintech initiatives
+- Growing investment in fintech startups
+
+## Challenges and Opportunities
+
+### Challenges
+- Regulatory compliance
+- Cybersecurity risks
+- Customer trust and adoption
+
+### Opportunities
+- Financial inclusion
+- Cross-border payment solutions
+- Integration of Islamic finance principles
+
+## Future Outlook
+
+The digital banking sector in the Middle East is poised for significant growth, with projections indicating continued expansion in the coming years. Key trends to watch include:
+
+- Increased collaboration between banks and fintechs
+- Expansion of digital payment solutions
+- Greater focus on customer experience
+- Integration of AI and machine learning
+
+As the digital banking ecosystem matures, we can expect to see more innovative solutions tailored to the unique needs of the Middle Eastern market.`,
+    tags: ["Digital Banking", "Fintech", "Middle East", "Banking Innovation"]
+  },
+  {
+    slug: "digital-banking-trends",
+    title: "The Rise of Digital Banking in the Middle East",
+    description: "How digital transformation is reshaping the banking sector in the Middle East region.",
+    date: "April 15, 2024",
+    readTime: "6 min read",
+    author: "Blue Diamond Finance",
+    authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
+    category: "Banking",
+    image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    content: `# The Rise of Digital Banking in the Middle East
+
+The Middle East is experiencing a digital banking revolution, transforming how consumers and businesses manage their finances. This article explores the key developments and future outlook for digital banking in the region.
+
+## Current Landscape
+
+### Growth Drivers
+- High smartphone penetration rates
+- Young, tech-savvy population
+- Government support for fintech innovation
+- Increasing demand for convenient banking solutions
+
+### Key Players
+- **Neobanks**: Digital-only banks gaining traction
+- **Traditional Banks**: Rapidly digitizing their services
+- **Fintech Startups**: Innovating with new financial solutions
+
+## Technological Innovations
+
+### 1. Mobile-First Banking
+- Feature-rich mobile apps
+- Biometric authentication
+- AI-powered customer service
+
+### 2. Open Banking
+- Secure data sharing between institutions
+- Personalized financial products
+- Improved customer experience
+
+### 3. Blockchain and Security
+- Enhanced transaction security
+- Faster cross-border payments
+- Reduced operational costs
+
+## Regional Focus
+
+### UAE
+- Dubai International Financial Centre (DIFC) fintech hub
+- Regulatory sandbox for innovation
+- Smart Dubai initiative
+
+### Saudi Arabia
+- Vision 2030 digital transformation goals
+- Saudi Central Bank fintech initiatives
+- Growing investment in fintech startups
+
+## Challenges and Opportunities
+
+### Challenges
+- Regulatory compliance
+- Cybersecurity risks
+- Customer trust and adoption
+
+### Opportunities
+- Financial inclusion
+- Cross-border payment solutions
+- Integration of Islamic finance principles
+
+## Future Outlook
+
+The digital banking sector in the Middle East is poised for significant growth, with projections indicating continued expansion in the coming years. Key trends to watch include:
+
+- Increased collaboration between banks and fintechs
+- Expansion of digital payment solutions
+- Greater focus on customer experience
+- Integration of AI and machine learning
+
+As the digital banking ecosystem matures, we can expect to see more innovative solutions tailored to the unique needs of the Middle Eastern market.`,
+    tags: ["Digital Banking", "Fintech", "Middle East", "Banking Innovation"]
+  },
+  {
+    slug: "sustainable-investing-guide",
+    title: "Sustainable Investing: A Complete Guide",
+    description: "Learn how to build an investment portfolio that aligns with your environmental and social values.",
+    date: "March 30, 2024",
+    readTime: "9 min read",
+    author: "Blue Diamond Finance",
+    authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
+    category: "ESG",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
+    content: `# Sustainable Investing: A Complete Guide
+
+Sustainable investing is an approach to investing that considers the long-term impact of your investments on the environment, society, and the economy. This guide provides an overview of sustainable investing, its benefits, and how to get started.
+
+## What is Sustainable Investing?
+
+Sustainable investing is an investment approach that considers the environmental, social, and governance (ESG) factors of a company or investment. It aims to generate long-term financial returns while also promoting sustainable development and minimizing harm to the environment and society.
+
+## Benefits of Sustainable Investing
+
+### 1. Long-term Financial Returns
+- Sustainable investing can lead to long-term financial returns, as companies that adopt sustainable practices tend to perform better over time.
+
+### 2. Environmental Benefits
+- Sustainable investing can help reduce greenhouse gas emissions, promote renewable energy, and conserve natural resources.
+
+### 3. Social Benefits
+- Sustainable investing can promote social justice, human rights, and labor standards.
+
+## How to Get Started with Sustainable Investing
+
+### 1. Assess Your Values and Goals
+- Identify your environmental and social values, and set clear investment goals.
+
+### 2. Choose Sustainable Investment Options
+- Select investment products that align with your values and goals, such as ESG funds, impact investing, or socially responsible investing.
+
+### 3. Evaluate ESG Performance
+- Assess the ESG performance of companies and investment products using ESG ratings and reports.
+
+### 4. Monitor and Adjust Your Portfolio
+- Regularly review your portfolio to ensure it remains aligned with your values and goals, and make adjustments as needed.
+
+## Sustainable Investing Strategies
+
+### 1. ESG Integration
+- Integrate ESG factors into your investment analysis and decision-making process.
+
+### 2. Impact Investing
+- Invest in companies or projects that have a positive impact on the environment or society.
+
+### 3. Socially Responsible Investing
+- Avoid investing in companies that have a negative impact on the environment or society.
+
+## Conclusion
+
+Sustainable investing is a powerful way to align your investments with your values and promote sustainable development. By following the steps outlined in this guide, you can get started with sustainable investing and make a positive impact on the world.`,
+    tags: ["Sustainable Investing", "ESG", "Impact Investing", "Socially Responsible Investing"]
   },
   {
     slug: "real-estate-financing-uae",
@@ -132,7 +550,7 @@ Your personal and business credit scores significantly impact loan approval and 
     date: "May 10, 2024",
     readTime: "7 min read",
     author: "Blue Diamond Advisors",
-    authorImage: "/placeholder-user-3.jpg",
+    authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
     category: "Real Estate",
     image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
     content: `# Real Estate Financing: What You Need to Know
@@ -305,29 +723,6 @@ export default function BlogPostPage() {
     }
   };
 
-  // Share on specific platforms
-  const shareOnPlatform = (platform: string) => {
-    const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent(blog.title);
-    const text = encodeURIComponent(blog.description);
-    
-    switch(platform) {
-      case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
-        break;
-      case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank');
-        break;
-      case 'linkedin':
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
-        break;
-      case 'email':
-        window.open(`mailto:?subject=${title}&body=${text}%0A%0ARead more: ${url}`, '_blank');
-        break;
-      default:
-        break;
-    }
-  };
 
   // Function to render markdown content
   const renderContent = (content: string) => {
@@ -598,154 +993,6 @@ export default function BlogPostPage() {
                   </motion.div>
                 )}
 
-                {/* Share Buttons */}
-                <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Share this article</h3>
-                  <div className="flex flex-wrap gap-3">
-                    <button 
-                      onClick={() => shareOnPlatform('facebook')}
-                      className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-                      aria-label="Share on Facebook"
-                    >
-                      <Facebook className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => shareOnPlatform('twitter')}
-                      className="flex items-center justify-center w-10 h-10 rounded-full bg-sky-500 text-white hover:bg-sky-600 transition-colors"
-                      aria-label="Share on Twitter"
-                    >
-                      <Twitter className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => shareOnPlatform('linkedin')}
-                      className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-colors"
-                      aria-label="Share on LinkedIn"
-                    >
-                      <Linkedin className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => shareOnPlatform('email')}
-                      className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors"
-                      aria-label="Share via Email"
-                    >
-                      <Mail className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => {
-                        navigator.clipboard.writeText(window.location.href);
-                        alert('Link copied to clipboard!');
-                      }}
-                      className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors"
-                      aria-label="Copy link"
-                    >
-                      <Share2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Author Bio */}
-                <div className="mt-12 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 mr-4">
-                      <Avatar className="w-16 h-16">
-                        <AvatarImage src={blog.authorImage} alt={blog.author} />
-                        <AvatarFallback>{blog.author.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{blog.author}</h3>
-                      <p className="text-gray-600 dark:text-gray-300 mt-1">
-                        {blog.author.includes('Team') ? 'Our team of financial experts brings years of experience in corporate finance, investment strategies, and market analysis to help you make informed decisions.' : 'Financial expert with years of experience in corporate finance and investment strategies.'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Comments Section */}
-                <div className="mt-16">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      Comments {comments.length > 0 && `(${comments.length})`}
-                    </h2>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => setShowComments(!showComments)}
-                      className="flex items-center gap-2"
-                    >
-                      <MessageCircle className="w-4 h-4" />
-                      {showComments ? 'Hide Comments' : 'Show Comments'}
-                    </Button>
-                  </div>
-
-                  {showComments && (
-                    <>
-                      <form onSubmit={handleCommentSubmit} className="mb-8">
-                        <div className="mb-4">
-                          <Textarea
-                            placeholder="Share your thoughts..."
-                            className="min-h-[100px]"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                          />
-                        </div>
-                        <div className="flex justify-end">
-                          <Button type="submit" disabled={!comment.trim()}>
-                            Post Comment
-                          </Button>
-                        </div>
-                      </form>
-
-                      <div className="space-y-6">
-                        {comments.map((comment) => (
-                          <div key={comment.id} className="border-b border-gray-200 dark:border-gray-800 pb-6 last:border-0 last:pb-0">
-                            <div className="flex items-start">
-                              <Avatar className="w-10 h-10 mr-3">
-                                <AvatarImage src={comment.avatar} alt={comment.author} />
-                                <AvatarFallback>{comment.author.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                              </Avatar>
-                              <div className="flex-1">
-                                <div className="flex items-center justify-between">
-                                  <h4 className="font-medium text-gray-900 dark:text-white">{comment.author}</h4>
-                                  <span className="text-sm text-gray-500 dark:text-gray-400">{comment.date}</span>
-                                </div>
-                                <p className="mt-1 text-gray-700 dark:text-gray-300">{comment.content}</p>
-                                <button className="mt-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center">
-                                  <MessageSquare className="w-3.5 h-3.5 mr-1" />
-                                  Reply
-                                </button>
-
-                                {/* Replies */}
-                                {comment.replies && comment.replies.length > 0 && (
-                                  <div className="mt-4 pl-6 border-l-2 border-gray-200 dark:border-gray-700 space-y-4">
-                                    {comment.replies.map((reply) => (
-                                      <div key={reply.id} className="pt-4">
-                                        <div className="flex items-start">
-                                          <Avatar className="w-8 h-8 mr-2">
-                                            <AvatarImage src={reply.avatar} alt={reply.author} />
-                                            <AvatarFallback>{reply.author.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                                          </Avatar>
-                                          <div>
-                                            <div className="flex items-center">
-                                              <span className="text-sm font-medium text-gray-900 dark:text-white">{reply.author}</span>
-                                              <span className="mx-2 text-gray-400">•</span>
-                                              <span className="text-xs text-gray-500 dark:text-gray-400">{reply.date}</span>
-                                            </div>
-                                            <p className="mt-0.5 text-sm text-gray-700 dark:text-gray-300">{reply.content}</p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
               </div>
             </div>
           </div>

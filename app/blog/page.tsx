@@ -9,7 +9,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import Link from "next/link"
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
+import {  useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 
 const blogs = [
@@ -29,7 +29,7 @@ const blogs = [
     title: "How to Secure Business Loans: A Step-by-Step Guide",
     description: "A comprehensive guide to help you navigate the process of securing business loans in the UAE.",
     date: "May 20, 2024",
-    author: "Finance Experts",
+    author: "Blue Diamond",
     category: "Loans",
     readTime: "7 min read",
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
@@ -47,14 +47,14 @@ const blogs = [
     comments: 15
   },
   {
-    slug: "investment-strategies-2024",
+    slug: "top-investment-strategies-2024",
     title: "Top Investment Strategies for 2024",
     description: "Discover the most promising investment opportunities and strategies for the coming year.",
     date: "April 28, 2024",
-    author: "Investment Team",
+    author: "Blue Diamond  Team",
     category: "Investing",
     readTime: "8 min read",
-    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    image: "https://images.unsplash.com/photo-1649817597237-68ad822141e6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHRvcCUyMGludmVzdHxlbnwwfHwwfHx8MA%3D%3D",
     comments: 22
   },
   {
@@ -62,7 +62,7 @@ const blogs = [
     title: "The Rise of Digital Banking in the Middle East",
     description: "How digital transformation is reshaping the banking sector in the Middle East region.",
     date: "April 15, 2024",
-    author: "Tech Finance",
+    author: "Blue Diamond  Finance",
     category: "Banking",
     readTime: "6 min read",
     image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
@@ -73,7 +73,7 @@ const blogs = [
     title: "Sustainable Investing: A Complete Guide",
     description: "Learn how to build an investment portfolio that aligns with your environmental and social values.",
     date: "March 30, 2024",
-    author: "Green Finance",
+    author: "Blue Diamond Finance",
     category: "ESG",
     readTime: "9 min read",
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
@@ -81,133 +81,8 @@ const blogs = [
   }
 ]
 
-const BlogPostCard = ({ post, isFeatured = false }: { post: typeof blogs[0], isFeatured?: boolean }) => {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [isHovered, setIsHovered] = useState(false)
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"]
-  })
-
-  const y = useTransform(scrollYProgress, [0, 1], [isFeatured ? 100 : 50, 0])
-  const opacity = useTransform(scrollYProgress, [0, 0.6, 1], [0, 0.3, 1])
-  const scale = useTransform(scrollYProgress, [0, 1], isFeatured ? [0.9, 1] : [0.95, 1])
-
-  return (
-    <motion.div
-      ref={cardRef}
-      style={{ y, opacity, scale }}
-      className={cn(
-        "relative group h-full",
-        isFeatured ? "col-span-1 md:col-span-2" : ""
-      )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <Link href={`/blog/${post.slug}`} className="block h-full">
-        <Card className="h-full overflow-hidden bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg border border-white/20 dark:border-gray-700/50 hover:border-blue-400/30 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-500/10">
-          <div className={cn(
-            "relative overflow-hidden",
-            isFeatured ? "h-80 md:h-96" : "h-56"
-          )}>
-            <motion.div 
-              className="absolute inset-0 z-0"
-              animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Image
-                src={post.image}
-                alt={post.title}
-                fill
-                className="object-cover transition-all duration-700"
-                sizes={isFeatured ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-            </motion.div>
-            
-            <div className="absolute top-4 right-4 z-10">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-600/90 text-white backdrop-blur-sm">
-                {post.category}
-              </span>
-            </div>
-            
-            <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-              <div className="flex items-center text-sm text-white/90 mb-3">
-                <span className="flex items-center mr-4">
-                  <User className="w-4 h-4 mr-1" />
-                  {post.author}
-                </span>
-                <span className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-1" />
-                  {post.date}
-                </span>
-              </div>
-              <h3 className={cn(
-                "font-bold text-white mb-2 line-clamp-2 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent",
-                isFeatured ? "text-2xl md:text-3xl" : "text-xl"
-              )}>
-                {post.title}
-              </h3>
-              <p className="text-white/80 text-sm line-clamp-2 mb-4">
-                {post.description}
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center text-xs text-white/70">
-                  <Clock className="w-3 h-3 mr-1" />
-                  {post.readTime}
-                </span>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-white/90 hover:text-white hover:bg-white/10 px-3 h-8 text-xs font-medium rounded-full backdrop-blur-sm"
-                >
-                  Read More
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
-              </div>
-            </div>
-          </div>
-          
-          {!isFeatured && (
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                <span className="flex items-center">
-                  <MessageSquare className="w-3 h-3 mr-1" />
-                  {post.comments} comments
-                </span>
-                <span className="flex items-center">
-                  <BookOpen className="w-3 h-3 mr-1" />
-                  {Math.floor(Math.random() * 1000) + 100} views
-                </span>
-              </div>
-            </CardContent>
-          )}
-        </Card>
-      </Link>
-      
-      {/* Floating elements */}
-      {isFeatured && (
-        <>
-          <motion.div 
-            className="absolute -top-4 -left-4 w-20 h-20 bg-blue-400/20 rounded-full -z-10"
-            animate={isHovered ? { x: -10, y: -10 } : { x: 0, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          />
-          <motion.div 
-            className="absolute -bottom-4 -right-4 w-16 h-16 bg-purple-400/20 rounded-full -z-10"
-            animate={isHovered ? { x: 10, y: 10 } : { x: 0, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          />
-        </>
-      )}
-    </motion.div>
-  )
-}
-
 export default function BlogPage() {
   const { t } = useLanguage()
-  const [searchQuery, setSearchQuery] = useState("")
-  const [activeCategory, setActiveCategory] = useState("all")
   const featuredPost = blogs[0]
   const recentPosts = blogs.slice(1, 7) // Show 6 recent posts
 
@@ -309,10 +184,6 @@ export default function BlogPage() {
                       <Clock className="w-4 h-4 mr-1" />
                       {featuredPost.readTime}
                     </span>
-                    <span className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                      <MessageSquare className="w-4 h-4 mr-1" />
-                      {featuredPost.comments} comments
-                    </span>
                   </div>
                 </div>
               </div>
@@ -377,10 +248,6 @@ export default function BlogPage() {
                         <span className="flex items-center">
                           <Clock className="w-3 h-3 mr-1" />
                           {post.readTime}
-                        </span>
-                        <span className="flex items-center">
-                          <MessageSquare className="w-3 h-3 mr-1" />
-                          {post.comments} comments
                         </span>
                       </div>
                     </CardContent>

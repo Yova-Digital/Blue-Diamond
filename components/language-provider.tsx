@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from "react"
+import React, { createContext, useContext, useState } from "react"
 
 const translations: Record<string, Record<string, string>> = {
   en: {
@@ -31,7 +31,6 @@ const translations: Record<string, Record<string, string>> = {
     "hero.fastDesc": "Swift approvals and efficient processing",
     "hero.secondaryCta": "Register Now",
     "hero.trustedBy": "Trusted by 1000+ businesses",
-    "common.readMore": "Read More",
     "registration.title": "Register Now",
     "registration.fullName": "Full Name",
     "registration.email": "Email",
@@ -113,20 +112,18 @@ const translations: Record<string, Record<string, string>> = {
     "blog.title": "Our Blog",
     "blog.subtitle": "Insights, news, and tips for smarter business finance.",
     "blog.readMore": "Read More",
-    "blog.publishedOn": "Published on",
-    "blog.by": "By",
-    "blog.minRead": "min read",
-    "blog.featuredPost": "Featured Post",
-    "blog.recentPosts": "Recent Posts",
-    "blog.latestInsights": "Latest Insights",
-    "blog.ctaTitle": "Stay Updated",
-    "blog.ctaSubtitle": "Subscribe to our newsletter for the latest financial insights and updates",
-    "blog.emailPlaceholder": "Enter your email address",
-    "blog.subscribe": "Subscribe",
+    "blog.ctaSubtitle": "Subscribe to our newsletter for the latest insights and updates.",
+    "blog.ctaTitle": "Want to stay updated?",
+    "blog.ctaDesc": "Subscribe to our newsletter for the latest insights and updates.",
     "blog.ctaButton": "Subscribe Now",
+    "blog.subscribe": "Subscribe",
     "blog.back": "Back to Blog",
     "blog.special": "Featured Insights",
-    "blog.featured": "Featured"
+    "blog.emailPlaceholder": "Enter your email",
+    "blog.featured": "Featured",
+    "blog.recentPosts": "Recent Posts",
+    "blog.featuredPost": "Featured Post",
+    "blog.latestInsights": "Latest Insights",
   },
   ar: {
     "nav.about": "من نحن",
@@ -156,7 +153,6 @@ const translations: Record<string, Record<string, string>> = {
     "hero.fastDesc": "موافقات سريعة ومعالجة فعالة",
     "hero.secondaryCta": "التسجيل الآن",
     "hero.trustedBy": "موثوق به من قبل أكثر من 1000 عملاء",
-    "common.readMore": "اقرأ المزيد",
     "registration.title": "سجل الآن",
     "registration.fullName": "الاسم بالكامل",
     "registration.email": "البريد الإلكتروني",
@@ -235,20 +231,18 @@ const translations: Record<string, Record<string, string>> = {
     "blog.title": "مدونتنا",
     "blog.subtitle": "مقالات، أخبار، ونصائح لتمويل أعمال أكثر ذكاءً.",
     "blog.readMore": "اقرأ المزيد",
-    "blog.publishedOn": "نشر في",
-    "blog.by": "بواسطة",
-    "blog.minRead": "دقيقة قراءة",
-    "blog.featuredPost": "المقال المميز",
-    "blog.recentPosts": "المقالات الحديثة",
-    "blog.latestInsights": "أحدث الرؤى",
-    "blog.ctaTitle": "ابقَ على اطلاع",
-    "blog.ctaSubtitle": "اشترك في نشرتنا البريدية للحصول على أحدث الرؤى والتحديثات المالية",
-    "blog.emailPlaceholder": "أدخل بريدك الإلكتروني",
-    "blog.subscribe": "اشترك",
+    "blog.ctaSubtitle": "اشترك في النشرة البريدية لأحدث المقالات والتحديثات.",
+    "blog.ctaTitle": "هل ترغب في البقاء على اطلاع؟",
+    "blog.ctaDesc": "اشترك في النشرة البريدية لأحدث المقالات والتحديثات.",
     "blog.ctaButton": "اشترك الآن",
+    "blog.subscribe": "اشترك",
     "blog.back": "العودة للمدونة",
     "blog.special": "مقالات مميزة",
     "blog.featured": "مميز",
+    "blog.emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "blog.recentPosts": "المقالات الأحدث",
+    "blog.featuredPost": "المقالات المميزة",
+    "blog.latestInsights": "آخر المقالات",
   },
 }
 
@@ -262,44 +256,17 @@ interface LanguageContextProps {
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined)
 
-const LANGUAGE_STORAGE_KEY = 'blue-diamond-language';
-
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<'en' | 'ar'>('en')
-  const [isMounted, setIsMounted] = useState(false)
-
-  // Load language from localStorage on mount
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) as 'en' | 'ar' | null;
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-    } else {
-      // Default to Arabic if browser language is Arabic, otherwise English
-      const browserLang = navigator.language.split('-')[0];
-      const defaultLang = browserLang === 'ar' ? 'ar' : 'en';
-      setLanguage(defaultLang);
-      localStorage.setItem(LANGUAGE_STORAGE_KEY, defaultLang);
-    }
-    setIsMounted(true);
-  }, []);
-
-  // Update localStorage when language changes
-  useEffect(() => {
-    if (isMounted) {
-      localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-      document.documentElement.lang = language;
-      document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
-    }
-  }, [language, isMounted]);
+  const [language, setLanguage] = useState<'en' | 'ar'>("en")
 
   const t: (key: string) => string = (key) => {
-    return translations[language]?.[key] || translations['en'][key] || key;
+    return translations[language][key] || key
   }
 
   return (
     <LanguageContext.Provider value={{ language, currentLanguage: language, setLanguage, t }}>
       <div className={language === "ar" ? "rtl" : "ltr"} dir={language === "ar" ? "rtl" : "ltr"}>
-        {isMounted ? children : null}
+        {children}
       </div>
     </LanguageContext.Provider>
   )

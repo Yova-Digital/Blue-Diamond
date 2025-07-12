@@ -24,6 +24,14 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/10">
+      {/* Subtle Background Image */}
+      <div className="absolute inset-0 z-0 opacity-30 dark:opacity-[0.15]">
+        <img
+          src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+          alt="Abstract financial background"
+          className="w-full h-full object-cover"
+        />
+      </div>
       {/* Animated Background Elements */}
       <motion.div 
         className="absolute inset-0 overflow-hidden"
