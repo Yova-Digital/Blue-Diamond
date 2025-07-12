@@ -1,7 +1,7 @@
 'use client';
 
 import { notFound } from 'next/navigation';
-import { Building, RefreshCw, Hammer, Briefcase, ShoppingCart, Ship, RotateCw, ArrowLeft } from 'lucide-react';
+import { Building, RefreshCw, Hammer, Briefcase, ShoppingCart, Ship, RotateCw, ArrowLeft, Handshake } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/components/language-provider';
 import { motion } from 'framer-motion';
@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 // Service data with more details
 const serviceDetails = {
   'real-estate': {
-    icon: Building,
+    icons: [Building],
     title: { en: 'Real Estate Financing', ar: 'تمويل العقارات' },
     description: { en: 'Tailored property financing solutions for investors and developers', ar: 'حلول تمويل عقاري مخصصة للمستثمرين والمطورين' },
     color: 'from-blue-500 to-blue-600',
@@ -27,7 +27,7 @@ const serviceDetails = {
   },
   // Add other services with similar structure
   'refinancing': {
-    icon: RefreshCw,
+    icons: [RefreshCw],
     title: { en: 'Refinancing Solutions', ar: 'حلول تمويل التمويل' },
     description: { en: 'Optimize your existing loans and credit facilities', ar: 'تحسين مؤقتاتك القروض والمنشطات المالية' },
     color: 'from-emerald-500 to-teal-600',
@@ -44,7 +44,7 @@ const serviceDetails = {
     ]
   },
   'corporate': {
-    icon: Briefcase,
+    icons: [Briefcase],
     title: { en: 'Corporate Financing', ar: 'تمويل الشركات' },
     description: { en: 'Comprehensive financial solutions for businesses of all sizes', ar: 'حلول مالية كاملة للشركات بجميع الأحجام' },
     color: 'from-purple-500 to-indigo-600',
@@ -61,7 +61,7 @@ const serviceDetails = {
     ]
   },
   'construction': {
-    icon: Hammer,
+    icons: [Hammer],
     title: { en: 'Construction Financing', ar: 'تمويل الإنشاءات' },
     description: { en: 'Tailored financing solutions for construction projects', ar: 'حلول تمويلية مخصصة لمشاريع الإنشاءات' },
     color: 'from-amber-500 to-orange-600',
@@ -78,7 +78,7 @@ const serviceDetails = {
     ]
   },
   'acquisition': {
-    icon: ShoppingCart,
+    icons: [Handshake], // Only Handshake icon
     title: { en: 'Acquisition Financing', ar: 'تمويل الاستحواذ' },
     description: { en: 'Strategic financing for business and asset acquisitions', ar: 'تمويل استراتيجي للاستحواذات التجارية والأصول' },
     color: 'from-rose-500 to-pink-600',
@@ -95,7 +95,7 @@ const serviceDetails = {
     ]
   },
   'trade': {
-    icon: Ship,
+    icons: [Ship],
     title: { en: 'Trade Finance', ar: 'تمويل التجارة' },
     description: { en: 'Solutions for international trade and commerce', ar: 'حلول للتجارة الدولية والتجارة' },
     color: 'from-cyan-500 to-blue-600',
@@ -112,7 +112,7 @@ const serviceDetails = {
     ]
   },
   'restructuring': {
-    icon: RotateCw,
+    icons: [RotateCw],
     title: { en: 'Debt Restructuring', ar: 'تصميم الديون' },
     description: { en: 'Strategic solutions for financial restructuring', ar: 'حلول استراتيجية لتصميم الديون' },
     color: 'from-violet-500 to-purple-600',
@@ -138,7 +138,7 @@ export default function ServiceDetailPage({ params }: { params: { slug: string }
     notFound();
   }
   
-  const Icon = service.icon;
+  const Icons = service.icons || [];
   
   return (
     <div>
@@ -156,8 +156,10 @@ export default function ServiceDetailPage({ params }: { params: { slug: string }
           </Link>
           
           <div className="flex flex-col md:flex-row items-start gap-8">
-            <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-sm border border-white/20">
-              <Icon className="w-12 h-12" />
+            <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-sm border border-white/20 flex gap-2">
+              {Icons.length > 0 && Icons.map((IconComp, idx) => (
+                <IconComp key={idx} className="w-12 h-12" />
+              ))}
             </div>
             <div>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{service.title[language]}</h1>
@@ -207,8 +209,10 @@ export default function ServiceDetailPage({ params }: { params: { slug: string }
                     transition={{ delay: 0.1 * index + 0.4 }}
                     className="flex items-start p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-shadow"
                   >
-                    <div className={`p-2 rounded-lg ${service.color.replace('from-', 'bg-').replace(' to-', '/50')} text-white mr-4`}>
-                      <Icon className="w-5 h-5" />
+                    <div className={`p-2 rounded-lg ${service.color.replace('from-', 'bg-').replace(' to-', '/50')} text-white mr-4 flex gap-1`}>
+                      {Icons.length > 0 && Icons.map((IconComp, idx) => (
+                        <IconComp key={idx} className="w-5 h-5" />
+                      ))}
                     </div>
                     <span className="text-gray-800 dark:text-gray-200">{feature[language]}</span>
                   </motion.div>
