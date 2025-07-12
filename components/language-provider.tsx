@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useState, useEffect } from "react"
 
 const translations: Record<string, Record<string, string>> = {
   en: {
@@ -27,7 +27,7 @@ const translations: Record<string, Record<string, string>> = {
     "hero.trustedPartner": "Trusted Partner",
     "hero.trustedDesc": "30+ years of expertise in UAE financial markets",
     "hero.fastExecution": "Fast Execution",
-    "hero.badge" : "Finance Broker",
+    "hero.badge": "Finance Broker",
     "hero.fastDesc": "Swift approvals and efficient processing",
     "hero.secondaryCta": "Register Now",
     "hero.trustedBy": "Trusted by 1000+ businesses",
@@ -82,6 +82,8 @@ const translations: Record<string, Record<string, string>> = {
     "services.ctaDesc":
       "Each service is underpinned by Blue Diamond's commitment to excellence—powered by over 30 years of market expertise, deep lender relationships, and a track record of delivering swift, efficient financial solutions.",
     "services.ctaButton": "Get Started Today",
+    "services.keyFeatures": "Key Features",
+    "services.whyChooseUs": "Why Choose Us",
     "why.title": "Why Choose Us",
     "why.description":
       "At Blue Diamond, we're not just brokers—we're problem solvers and financial architects. Every business is unique, and so are our solutions.",
@@ -124,6 +126,9 @@ const translations: Record<string, Record<string, string>> = {
     "blog.recentPosts": "Recent Posts",
     "blog.featuredPost": "Featured Post",
     "blog.latestInsights": "Latest Insights",
+    "common.readMore": "Read More",
+    "contact.availability": "Available",
+    "common.backToServices" : "Back to services"
   },
   ar: {
     "nav.about": "من نحن",
@@ -132,9 +137,9 @@ const translations: Record<string, Record<string, string>> = {
     "nav.blog": "المدونة",
     "nav.home": "الرئيسية",
     "nav.language": "English",
-    "hero.title": "بلو دايموند للوساطة التمويلية",
+    "hero.title": "بلو دايموند لوسيط تمويل",
     "hero.subtitle": "طريقك نحو آفاق جديدة من التمويل الذكي",
-    "hero.badge" : "وسيط تمويل",
+    "hero.badge": "وسيط تمويل",
     "hero.description": "تمكين الشركات بحلول مالية مخصصة",
     "hero.cta": "ابدأ الآن",
     "hero.growthFocused": "التركيز على النمو",
@@ -201,6 +206,8 @@ const translations: Record<string, Record<string, string>> = {
     "services.ctaDesc":
       "جميع خدماتنا تستند إلى التزامنا بالتميز، ومعرفة عميقة بالسوق، وعلاقات قوية مع الممولين، مدعومة بخبرة تتجاوز 30 عامًا في تقديم حلول مالية فعالة وسريعة التنفيذ.",
     "services.ctaButton": "ابدأ اليوم",
+    "services.keyFeatures": "المميزات الرئيسية",
+    "services.whyChooseUs": "لماذا تختارنا",
     "why.title": "لماذا نحن",
     "why.description":
       "في بلو دايموند، لسنا مجرد وسطاء، بل نحن مهندسو حلول مالية. نُدرك أن كل عمل تجاري فريد من نوعه، ولهذا فإن حلولنا مصمّمة خصيصًا لتناسب احتياجاتكم.",
@@ -243,13 +250,16 @@ const translations: Record<string, Record<string, string>> = {
     "blog.recentPosts": "المقالات الأحدث",
     "blog.featuredPost": "المقالات المميزة",
     "blog.latestInsights": "آخر المقالات",
+    "common.readMore": "اقرأ المزيد",
+    "contact.availability": "متاح",
+    "common.backToServices": "الرجوع للخدمات"
   },
 }
 
 interface LanguageContextProps {
   language: 'en' | 'ar'
   currentLanguage: 'en' | 'ar'
-  setLanguage: React.Dispatch<React.SetStateAction<'en' | 'ar'>>
+  setLanguage: (language: 'en' | 'ar') => void
   t: (key: string) => string
 }
 
@@ -257,14 +267,33 @@ interface LanguageContextProps {
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<'en' | 'ar'>("en")
+  const [language, setLanguage] = useState<'en' | 'ar'>(() => {
+    // Check if we're in the browser
+    if (typeof window !== 'undefined') {
+      const savedLanguage = localStorage.getItem('language')
+      return savedLanguage === 'ar' ? 'ar' : 'en'
+    }
+    return 'en'
+  })
 
   const t: (key: string) => string = (key) => {
     return translations[language][key] || key
   }
 
+  // Save language to localStorage when it changes
+  const handleLanguageChange = (newLanguage: 'en' | 'ar') => {
+    setLanguage(newLanguage)
+  }
+
+  // Save language to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', language)
+    }
+  }, [language])
+
   return (
-    <LanguageContext.Provider value={{ language, currentLanguage: language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, currentLanguage: language, setLanguage: handleLanguageChange, t }}>
       <div className={language === "ar" ? "rtl" : "ltr"} dir={language === "ar" ? "rtl" : "ltr"}>
         {children}
       </div>

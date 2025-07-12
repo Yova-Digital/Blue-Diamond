@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef, useState } from "react"
 import { useLanguage } from "./language-provider"
-import { Building, RefreshCw, Hammer, Briefcase, ShoppingCart, Ship, RotateCcw, ArrowRight, ArrowUpRight } from "lucide-react"
+import { Building, RefreshCw, Hammer, Briefcase, Handshake, Ship, RotateCcw, ArrowRight, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 
 const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
@@ -20,41 +20,44 @@ const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
       onMouseLeave={() => onHover(null)}
     >
       <div className={`
-        relative z-10 h-full flex flex-col rounded-3xl overflow-hidden transition-all duration-500
-        ${isHovered === index ? 'bg-white dark:bg-gray-800 shadow-2xl scale-105' : 'bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm'}
-        border border-gray-100 dark:border-gray-700
+        relative z-10 h-full flex flex-col rounded-3xl overflow-hidden transition-all duration-700
+        ${isHovered === index ? 'bg-white dark:bg-gray-800 shadow-2xl scale-105 transform rotate-1' : 'bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm'}
+        border-2 border-gray-200 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-400
+        hover:shadow-2xl hover:shadow-blue-500/20
       `}>
         {/* Service Image */}
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-52 overflow-hidden">
           <img 
             src={service.image} 
             alt={service.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
-          <div className={`absolute inset-0 ${service.color.replace('/80', '/60')} mix-blend-multiply`}></div>
+          <div className={`absolute inset-0 ${service.color.replace('/80', '/40')} mix-blend-multiply`}></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
           {/* Icon Overlay */}
           <div className={`
-            absolute -bottom-6 right-6 w-16 h-16 rounded-2xl flex items-center justify-center 
-            text-white transition-all duration-500 ${isHovered === index ? 'bg-white text-gray-800' : service.color.replace('/80', '')}
-            shadow-lg group-hover:shadow-xl
+            absolute -bottom-8 ${isRTL ? 'left-6' : 'right-6'} w-24 h-24 rounded-3xl flex items-center justify-center 
+            transition-all duration-700 ${isHovered === index ? 'bg-white text-blue-600 shadow-2xl scale-110' : `text-white ${service.color.replace('/80', '')}`}
+            shadow-2xl group-hover:shadow-2xl border-4 border-white/30 backdrop-blur-sm
           `}>
-            <service.icon className={`w-8 h-8 transition-all duration-500 ${isHovered === index ? 'scale-110' : ''}`} />
+            <service.icon className={`w-12 h-12 transition-all duration-700 ${isHovered === index ? 'scale-110' : ''}`} />
           </div>
         </div>
         
         {/* Content */}
-        <div className="relative z-10 p-6 pt-8 flex-1 flex flex-col">
+        <div className="relative z-10 p-8 pt-10 flex-1 flex flex-col">
           {/* Title */}
           <h3 className={`
-            text-xl font-bold mb-3 leading-tight transition-colors duration-500
+            text-2xl font-bold mb-4 leading-tight transition-colors duration-500
             ${isHovered === index ? 'text-gray-900 dark:text-white' : 'text-gray-900 dark:text-white'}
+            group-hover:text-blue-600 dark:group-hover:text-blue-400
           `}>
             {service.title}
           </h3>
 
           {/* Description */}
           <p className={`
-            transition-colors duration-500 leading-relaxed mb-6 flex-1
+            transition-colors duration-500 leading-relaxed mb-6 flex-1 text-lg
             ${isHovered === index ? 'text-gray-600 dark:text-gray-300' : 'text-gray-600 dark:text-gray-300'}
           `}>
             {service.description}
@@ -63,30 +66,31 @@ const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
           <Link 
             href={`/services/${service.slug}`}
             className={`
-              inline-flex items-center text-sm font-medium transition-all duration-300 mt-auto
+              inline-flex items-center text-base font-semibold transition-all duration-300 mt-auto
               ${isHovered === index ? 'text-blue-600 dark:text-blue-400' : 'text-blue-600 dark:text-blue-400'}
-              group hover:underline self-start
+              group hover:underline self-start px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20
             `}
           >
             {t('common.readMore')}
-            <ArrowUpRight className={`w-4 h-4 ${isRTL ? 'mr-1' : 'ml-1'} group-hover:translate-x-0.5 transition-transform`} />
+            <ArrowUpRight className={`w-5 h-5 ${isRTL ? 'mr-2' : 'ml-2'} group-hover:translate-x-1 transition-transform duration-300`} />
           </Link>
         </div>
       </div>
       
       {/* Decorative element */}
       <div className={`
-        absolute -inset-1 rounded-3xl bg-gradient-to-r ${service.color.replace('/80', '')} 
-        opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500 -z-10
+        absolute -inset-3 rounded-3xl bg-gradient-to-r ${service.color.replace('/80', '')} 
+        opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-700 -z-10
       `}></div>
     </motion.div>
   )
 }
 
 export default function Services() {
-  const { t } = useLanguage()
+  const { t, currentLanguage } = useLanguage()
   const sectionRef = useRef(null)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+  const isRTL = currentLanguage === 'ar'
   
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -130,7 +134,7 @@ export default function Services() {
       image: "https://images.unsplash.com/photo-1709400628079-5960a9f2ded6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Q29ycG9yYXRlJTIwRmluYW5jZSUyMCUyNiUyMFdvcmtpbmclMjBDYXBpdGFsJTIwRmFjaWxpdGllc3xlbnwwfHwwfHx8MA%3D%3D"
     },
     {
-      icon: ShoppingCart,
+      icon: Handshake,
       title: t("services.acquisition"),
       description: t("services.acquisitionDesc"),
       color: "from-rose-400/80 to-pink-500/80",
@@ -175,19 +179,21 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-20 max-w-4xl mx-auto"
+          className="text-center mb-24 max-w-5xl mx-auto"
         >
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6 border border-blue-200 dark:border-blue-800">
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 text-blue-600 dark:text-blue-400 text-base font-semibold mb-8 border-2 border-blue-200 dark:border-blue-800 shadow-lg">
+            <span className="mr-2">✨</span>
             {t("services.subtitle")}
+            <span className="ml-2">✨</span>
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400">
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400">
             {t("services.title")}
           </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-transparent mx-auto rounded-full"></div>
+          <div className="w-32 h-2 bg-gradient-to-r from-blue-500 via-cyan-400 to-transparent mx-auto rounded-full shadow-lg"></div>
         </motion.div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 relative">
           {services.map((service, index) => (
             <ServiceCard 
               key={index}

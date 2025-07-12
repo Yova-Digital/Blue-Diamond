@@ -12,7 +12,7 @@ import Image from "next/image"
 import {  useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 
-const blogs = [
+const blogsEn = [
   {
     slug: "future-of-corporate-finance-uae",
     title: "The Future of Corporate Finance in the UAE",
@@ -81,8 +81,78 @@ const blogs = [
   }
 ]
 
+const blogsAr = [
+  {
+    slug: "future-of-corporate-finance-uae",
+    title: "مستقبل التمويل المؤسسي في الإمارات",
+    description: "اكتشف أحدث الاتجاهات والفرص التي تشكل المشهد المالي للشركات في الإمارات.",
+    date: "1 يونيو 2024",
+    author: "فريق بلو دايموند",
+    category: "التمويل",
+    readTime: "5 دقائق قراءة",
+    image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2065&q=80",
+    comments: 12
+  },
+  {
+    slug: "how-to-secure-business-loans-uae",
+    title: "كيفية الحصول على قروض تجارية: دليل شامل",
+    description: "دليل شامل لمساعدتك في التنقل في عملية الحصول على قروض تجارية في الإمارات.",
+    date: "20 مايو 2024",
+    author: "بلو دايموند",
+    category: "القروض",
+    readTime: "7 دقائق قراءة",
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    comments: 8
+  },
+  {
+    slug: "real-estate-financing-uae",
+    title: "تمويل العقارات: ما تحتاج معرفته",
+    description: "رؤى أساسية في خيارات تمويل العقارات واستراتيجيات الشركات الإماراتية.",
+    date: "10 مايو 2024",
+    author: "مستشارو بلو دايموند",
+    category: "العقارات",
+    readTime: "6 دقائق قراءة",
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
+    comments: 15
+  },
+  {
+    slug: "top-investment-strategies-2024",
+    title: "أفضل استراتيجيات الاستثمار لعام 2024",
+    description: "اكتشف أكثر فرص الاستثمار والاستراتيجيات الواعدة للعام القادم.",
+    date: "28 أبريل 2024",
+    author: "فريق بلو دايموند",
+    category: "الاستثمار",
+    readTime: "8 دقائق قراءة",
+    image: "https://images.unsplash.com/photo-1649817597237-68ad822141e6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHRvcCUyMGludmVzdHxlbnwwfHwwfHx8MA%3D%3D",
+    comments: 22
+  },
+  {
+    slug: "digital-banking-trends",
+    title: "صعود الخدمات المصرفية الرقمية في الشرق الأوسط",
+    description: "كيف يغير التحول الرقمي قطاع الخدمات المصرفية في منطقة الشرق الأوسط.",
+    date: "15 أبريل 2024",
+    author: "بلو دايموند للتمويل",
+    category: "الخدمات المصرفية",
+    readTime: "6 دقائق قراءة",
+    image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    comments: 18
+  },
+  {
+    slug: "sustainable-investing-guide",
+    title: "الاستثمار المستدام: دليل شامل",
+    description: "تعلم كيفية بناء محفظة استثمارية تتماشى مع قيمك البيئية والاجتماعية.",
+    date: "30 مارس 2024",
+    author: "بلو دايموند للتمويل",
+    category: "الاستثمار المستدام",
+    readTime: "9 دقائق قراءة",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
+    comments: 14
+  }
+]
+
 export default function BlogPage() {
-  const { t } = useLanguage()
+  const { t, currentLanguage } = useLanguage()
+  const blogs = currentLanguage === 'ar' ? blogsAr : blogsEn
   const featuredPost = blogs[0]
   const recentPosts = blogs.slice(1, 7) // Show 6 recent posts
 

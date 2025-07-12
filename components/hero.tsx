@@ -116,29 +116,6 @@ export default function Hero() {
                 />
               </motion.div>
 
-              {/* Trust Badges */}
-              <motion.div
-                className="pt-8 flex flex-wrap items-center justify-center md:justify-start gap-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              >
-                <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''} gap-x-5`}>
-                  <div className={`flex ${isRTL ? 'space-x-reverse' : ''} -space-x-2`}>
-                    {isRTL 
-                      ? ["A", "M", "S", "Y"].map((i) => (
-                          <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 border-2 border-white dark:border-gray-800 flex items-center justify-center font-bold text-white">{i}</div>
-                        ))
-                      : ["Y", "S", "M", "A"].map((i) => (
-                          <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 border-2 border-white dark:border-gray-800 flex items-center justify-center font-bold text-white">{i}</div>
-                        ))
-                    }
-                  </div>
-                  <span className={`${isRTL ? 'mr-3' : 'ml-3'} text-sm text-gray-600 dark:text-gray-400`}>
-                    {t("hero.trustedBy") || "Trusted by 1000+ businesses"}
-                  </span>
-                </div>
-              </motion.div>
             </motion.div>
 
             {/* Right Column - Image */}
