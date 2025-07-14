@@ -3,8 +3,6 @@
 import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
 import { useLanguage } from "@/components/language-provider"
 import { Calendar, User, ArrowLeft, Clock, MessageSquare, Share2, Tag, ArrowUpRight, ChevronUp, MessageCircle, Facebook, Twitter, Linkedin, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -21,7 +19,7 @@ const blogs = [
     title: "How to Secure Business Loans: A Step-by-Step Guide",
     description: "A comprehensive guide to help you navigate the process of securing business loans in the UAE.",
     date: "May 20, 2024",
-    readTime: "7 min read",
+    readTime: 7,
     author: "Finance Experts",
     authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
     category: "Loans",
@@ -155,7 +153,7 @@ Securing a business loan in the UAE requires careful planning and preparation. B
     title: "The Future of Corporate Finance in the UAE",
     description: "Explore the latest trends and opportunities shaping the financial landscape for businesses in the UAE.",
     date: "June 1, 2024",
-    readTime: "7 min read",
+    readTime: 7,
     author: "Blue Diamond Team",
     authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
     category: "Finance",
@@ -258,7 +256,7 @@ The corporate finance landscape in the UAE is poised for continued transformatio
     title: "Top Investment Strategies for 2024",
     description: "Discover the most promising investment opportunities and strategies for the coming year.",
     date: "April 28, 2024",
-    readTime: "8 min read",
+    readTime: 8,
     author: "Investment Team",
     authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
     category: "Investing",
@@ -329,7 +327,7 @@ By implementing these strategies and staying informed about market developments,
     title: "The Rise of Digital Banking in the Middle East",
     description: "How digital transformation is reshaping the banking sector in the Middle East region.",
     date: "April 15, 2024",
-    readTime: "6 min read",
+    readTime: 6,
     author: "Tech Finance",
     authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
     category: "Banking",
@@ -409,7 +407,7 @@ As the digital banking ecosystem matures, we can expect to see more innovative s
     title: "The Rise of Digital Banking in the Middle East",
     description: "How digital transformation is reshaping the banking sector in the Middle East region.",
     date: "April 15, 2024",
-    readTime: "6 min read",
+    readTime: 6,
     author: "Blue Diamond Finance",
     authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
     category: "Banking",
@@ -489,7 +487,7 @@ As the digital banking ecosystem matures, we can expect to see more innovative s
     title: "Sustainable Investing: A Complete Guide",
     description: "Learn how to build an investment portfolio that aligns with your environmental and social values.",
     date: "March 30, 2024",
-    readTime: "9 min read",
+    readTime: 9,
     author: "Blue Diamond Finance",
     authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
     category: "ESG",
@@ -548,7 +546,7 @@ Sustainable investing is a powerful way to align your investments with your valu
     title: "Real Estate Financing: What You Need to Know",
     description: "Key insights into real estate financing options and strategies for UAE businesses.",
     date: "May 10, 2024",
-    readTime: "7 min read",
+    readTime: 7,
     author: "Blue Diamond Advisors",
     authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
     category: "Real Estate",
@@ -606,6 +604,8 @@ const sharePost = (title: string) => {
   }
 }
 
+const isArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
+
 export default function BlogPostPage() {
   const { slug } = useParams()
   const { t } = useLanguage()
@@ -616,7 +616,6 @@ export default function BlogPostPage() {
   if (!blog) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-        <Header />
         <section className="pt-40 pb-20 text-center px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -635,7 +634,6 @@ export default function BlogPostPage() {
             </Button>
           </motion.div>
         </section>
-        <Footer />
       </main>
     )
   }
@@ -818,6 +816,8 @@ export default function BlogPostPage() {
     .filter(b => b.slug !== slug)
     .slice(0, 2);
 
+  const articleDir = isArabic(blog.title) ? "rtl" : "ltr";
+
   return (
     <AnimatePresence>
       {/* Reading Progress Bar */}
@@ -829,13 +829,13 @@ export default function BlogPostPage() {
       </div>
       
       <motion.main 
+        dir={articleDir}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative"
+        className={`min-h-screen bg-gradient-to-b from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative ${articleDir === "rtl" ? "text-right" : "text-left"}`}
         ref={contentRef}
       >
-        <Header />
         
         {/* Back Button */}
         <div className="container mx-auto px-4 pt-8">
@@ -870,10 +870,16 @@ export default function BlogPostPage() {
                 <Tag className="w-3.5 h-3.5 mr-1.5" />
                 {blog.category}
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
+              <h1
+                className={`text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6 ${isArabic(blog.title) ? "text-right" : "text-left"}`}
+                dir={isArabic(blog.title) ? "rtl" : "ltr"}
+              >
                 {blog.title}
               </h1>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
+              <p
+                className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 ${isArabic(blog.description) ? "text-right" : "text-left"}`}
+                dir={isArabic(blog.description) ? "rtl" : "ltr"}
+              >
                 {blog.description}
               </p>
               
@@ -897,7 +903,7 @@ export default function BlogPostPage() {
                   <span className="hidden sm:block">•</span>
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 mr-1.5" />
-                    {blog.readTime}
+                    {`${blog.readTime} ${t('blog.minRead')}`}
                   </div>
                 </div>
                 
@@ -1003,8 +1009,8 @@ export default function BlogPostPage() {
           <section className="py-16 bg-gray-50 dark:bg-gray-900/50">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">You might also like</h2>
-                <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Explore more insightful articles on financial topics</p>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{t("blog.relatedTitle")}</h2>
+                <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{t("blog.relatedDesc")}</p>
               </div>
               
               <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -1036,7 +1042,7 @@ export default function BlogPostPage() {
                         <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
                           <span>{post.date}</span>
                           <span className="mx-2">•</span>
-                          <span>{post.readTime}</span>
+                          <span>{`${post.readTime} ${t('blog.minRead')}`}</span>
                         </div>
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
                           {post.title}
@@ -1049,7 +1055,7 @@ export default function BlogPostPage() {
                           className="p-0 h-auto text-blue-600 dark:text-blue-400 hover:no-underline group-hover:underline"
                           onClick={() => router.push(`/blog/${post.slug}`)}
                         >
-                          Read more
+                          {t('blog.readMore')}
                           <ArrowUpRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-0.5" />
                         </Button>
                       </CardContent>
@@ -1064,7 +1070,7 @@ export default function BlogPostPage() {
                   onClick={() => router.push('/blog')}
                   className="px-6 py-3 border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
                 >
-                  View All Articles
+                  {t('blog.viewAll')}
                 </Button>
               </div>
             </div>

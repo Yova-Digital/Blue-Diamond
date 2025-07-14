@@ -5,12 +5,32 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/components/language-provider"
 import { Calendar, User, ArrowRight, Sparkles, Star, Clock, Tag, MessageSquare, Search, ChevronRight, BookOpen } from "lucide-react"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
 import Link from "next/link"
 import Image from "next/image"
 import {  useRef, useState } from "react"
 import { cn } from "@/lib/utils"
+
+// Function to detect if text is Arabic
+const isArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
+
+// Function to detect article language
+const getArticleLanguage = (title: string, description: string): 'en' | 'ar' => {
+  const titleIsArabic = isArabic(title);
+  const descriptionIsArabic = isArabic(description);
+  
+  // If both title and description are in Arabic, it's Arabic
+  if (titleIsArabic && descriptionIsArabic) {
+    return 'ar';
+  }
+  
+  // If both are in English, it's English
+  if (!titleIsArabic && !descriptionIsArabic) {
+    return 'en';
+  }
+  
+  // If mixed, default to English
+  return 'en';
+};
 
 const blogsEn = [
   {
@@ -20,7 +40,7 @@ const blogsEn = [
     date: "June 1, 2024",
     author: "Blue Diamond Team",
     category: "Finance",
-    readTime: "5 min read",
+    readTime: 5,
     image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2065&q=80",
     comments: 12
   },
@@ -31,7 +51,7 @@ const blogsEn = [
     date: "May 20, 2024",
     author: "Blue Diamond",
     category: "Loans",
-    readTime: "7 min read",
+    readTime: 7,
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     comments: 8
   },
@@ -42,7 +62,7 @@ const blogsEn = [
     date: "May 10, 2024",
     author: "Blue Diamond Advisors",
     category: "Real Estate",
-    readTime: "6 min read",
+    readTime: 6,
     image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
     comments: 15
   },
@@ -53,7 +73,7 @@ const blogsEn = [
     date: "April 28, 2024",
     author: "Blue Diamond  Team",
     category: "Investing",
-    readTime: "8 min read",
+    readTime: 8,
     image: "https://images.unsplash.com/photo-1649817597237-68ad822141e6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHRvcCUyMGludmVzdHxlbnwwfHwwfHx8MA%3D%3D",
     comments: 22
   },
@@ -64,7 +84,7 @@ const blogsEn = [
     date: "April 15, 2024",
     author: "Blue Diamond  Finance",
     category: "Banking",
-    readTime: "6 min read",
+    readTime: 6,
     image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     comments: 18
   },
@@ -75,76 +95,7 @@ const blogsEn = [
     date: "March 30, 2024",
     author: "Blue Diamond Finance",
     category: "ESG",
-    readTime: "9 min read",
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
-    comments: 14
-  }
-]
-
-const blogsAr = [
-  {
-    slug: "future-of-corporate-finance-uae",
-    title: "مستقبل التمويل المؤسسي في الإمارات",
-    description: "اكتشف أحدث الاتجاهات والفرص التي تشكل المشهد المالي للشركات في الإمارات.",
-    date: "1 يونيو 2024",
-    author: "فريق بلو دايموند",
-    category: "التمويل",
-    readTime: "5 دقائق قراءة",
-    image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2065&q=80",
-    comments: 12
-  },
-  {
-    slug: "how-to-secure-business-loans-uae",
-    title: "كيفية الحصول على قروض تجارية: دليل شامل",
-    description: "دليل شامل لمساعدتك في التنقل في عملية الحصول على قروض تجارية في الإمارات.",
-    date: "20 مايو 2024",
-    author: "بلو دايموند",
-    category: "القروض",
-    readTime: "7 دقائق قراءة",
-    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    comments: 8
-  },
-  {
-    slug: "real-estate-financing-uae",
-    title: "تمويل العقارات: ما تحتاج معرفته",
-    description: "رؤى أساسية في خيارات تمويل العقارات واستراتيجيات الشركات الإماراتية.",
-    date: "10 مايو 2024",
-    author: "مستشارو بلو دايموند",
-    category: "العقارات",
-    readTime: "6 دقائق قراءة",
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
-    comments: 15
-  },
-  {
-    slug: "top-investment-strategies-2024",
-    title: "أفضل استراتيجيات الاستثمار لعام 2024",
-    description: "اكتشف أكثر فرص الاستثمار والاستراتيجيات الواعدة للعام القادم.",
-    date: "28 أبريل 2024",
-    author: "فريق بلو دايموند",
-    category: "الاستثمار",
-    readTime: "8 دقائق قراءة",
-    image: "https://images.unsplash.com/photo-1649817597237-68ad822141e6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHRvcCUyMGludmVzdHxlbnwwfHwwfHx8MA%3D%3D",
-    comments: 22
-  },
-  {
-    slug: "digital-banking-trends",
-    title: "صعود الخدمات المصرفية الرقمية في الشرق الأوسط",
-    description: "كيف يغير التحول الرقمي قطاع الخدمات المصرفية في منطقة الشرق الأوسط.",
-    date: "15 أبريل 2024",
-    author: "بلو دايموند للتمويل",
-    category: "الخدمات المصرفية",
-    readTime: "6 دقائق قراءة",
-    image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    comments: 18
-  },
-  {
-    slug: "sustainable-investing-guide",
-    title: "الاستثمار المستدام: دليل شامل",
-    description: "تعلم كيفية بناء محفظة استثمارية تتماشى مع قيمك البيئية والاجتماعية.",
-    date: "30 مارس 2024",
-    author: "بلو دايموند للتمويل",
-    category: "الاستثمار المستدام",
-    readTime: "9 دقائق قراءة",
+    readTime: 9,
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
     comments: 14
   }
@@ -152,9 +103,17 @@ const blogsAr = [
 
 export default function BlogPage() {
   const { t, currentLanguage } = useLanguage()
-  const blogs = currentLanguage === 'ar' ? blogsAr : blogsEn
-  const featuredPost = blogs[0]
-  const recentPosts = blogs.slice(1, 7) // Show 6 recent posts
+  
+  // Combine all blogs and detect their language
+  const allBlogs = [...blogsEn].map(blog => ({
+    ...blog,
+    language: getArticleLanguage(blog.title, blog.description)
+  }));
+  
+  // Sort blogs by date (newest first) and get featured and recent posts
+  const sortedBlogs = allBlogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const featuredPost = sortedBlogs[0];
+  const recentPosts = sortedBlogs.slice(1, 7); // Show 6 recent posts
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/20">
@@ -165,7 +124,6 @@ export default function BlogPage() {
         <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-float animation-delay-4000"></div>
       </div>
 
-      <Header />
 
       <main className="container mx-auto px-4 py-16 md:py-24">
         {/* Hero Section */}
@@ -243,16 +201,22 @@ export default function BlogPage() {
                       {featuredPost.date}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <h3
+                    className={`text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors ${isArabic(featuredPost.title) ? "text-right" : "text-left"}`}
+                    dir={isArabic(featuredPost.title) ? "rtl" : "ltr"}
+                  >
                     {featuredPost.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3">
+                  <p
+                    className={`text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 ${isArabic(featuredPost.description) ? "text-right" : "text-left"}`}
+                    dir={isArabic(featuredPost.description) ? "rtl" : "ltr"}
+                  >
                     {featuredPost.description}
                   </p>
                   <div className="flex items-center justify-between mt-auto">
                     <span className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                       <Clock className="w-4 h-4 mr-1" />
-                      {featuredPost.readTime}
+                      {currentLanguage === 'ar' ? featuredPost.readTime : `${featuredPost.readTime} ${t('blog.minRead')}`}
                     </span>
                   </div>
                 </div>
@@ -273,67 +237,79 @@ export default function BlogPage() {
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {recentPosts.map((post, index) => (
-              <motion.div
-                key={post.slug}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + (index * 0.1), duration: 0.5 }}
-                whileHover={{ y: -5 }}
-              >
-                <Link href={`/blog/${post.slug}`} className="block h-full">
-                  <Card className="h-full border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-                    <div className="relative h-48 w-full">
-                      <Image
-                        src={post.image}
-                        alt={post.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                      <div className="absolute top-3 right-3 bg-white/90 dark:bg-gray-900/90 px-2 py-1 rounded-full text-xs font-medium text-blue-800 dark:text-blue-200">
-                        {post.category}
+            {recentPosts.map((post, index) => {
+              const cardDir = isArabic(post.title) ? "rtl" : "ltr";
+              return (
+                <motion.div
+                  key={post.slug}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + (index * 0.1), duration: 0.5 }}
+                  whileHover={{ y: -5 }}
+                >
+                  <Link href={`/blog/${post.slug}`} className="block h-full">
+                    <Card
+                      dir={cardDir}
+                      className={`h-full border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300 overflow-hidden ${cardDir === "rtl" ? "text-right" : "text-left"}`}
+                    >
+                      <div className="relative h-48 w-full">
+                        <Image
+                          src={post.image}
+                          alt={post.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute top-3 right-3 bg-white/90 dark:bg-gray-900/90 px-2 py-1 rounded-full text-xs font-medium text-blue-800 dark:text-blue-200">
+                          {post.category}
+                        </div>
                       </div>
-                    </div>
-                    <CardHeader>
-                      <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-2">
-                        <span className="flex items-center mr-3">
-                          <User className="w-3 h-3 mr-1" />
-                          {post.author}
-                        </span>
-                        <span className="flex items-center">
-                          <Calendar className="w-3 h-3 mr-1" />
-                          {post.date}
-                        </span>
-                      </div>
-                      <CardTitle className="text-xl font-bold text-gray-900 dark:text-white line-clamp-2 mb-2">
-                        {post.title}
-                      </CardTitle>
-                      <CardDescription className="text-gray-600 dark:text-gray-300 line-clamp-2">
-                        {post.description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                        <span className="flex items-center">
-                          <Clock className="w-3 h-3 mr-1" />
-                          {post.readTime}
-                        </span>
-                      </div>
-                    </CardContent>
-                    <CardFooter>
-                      <Button 
-                        variant="ghost" 
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 px-0"
-                      >
-                        {t('blog.readMore') || 'Read More'}
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </Link>
-              </motion.div>
-            ))}
+                      <CardHeader>
+                        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-2">
+                          <span className="flex items-center mr-3">
+                            <User className="w-3 h-3 mr-1" />
+                            {post.author}
+                          </span>
+                          <span className="flex items-center">
+                            <Calendar className="w-3 h-3 mr-1" />
+                            {post.date}
+                          </span>
+                        </div>
+                        <CardTitle
+                          className={`text-xl font-bold text-gray-900 dark:text-white line-clamp-2 mb-2 ${isArabic(post.title) ? "text-right" : "text-left"}`}
+                          dir={isArabic(post.title) ? "rtl" : "ltr"}
+                        >
+                          {post.title}
+                        </CardTitle>
+                        <CardDescription
+                          className={`text-gray-600 dark:text-gray-300 line-clamp-2 ${isArabic(post.description) ? "text-right" : "text-left"}`}
+                          dir={isArabic(post.description) ? "rtl" : "ltr"}
+                        >
+                          {post.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                          <span className="flex items-center">
+                            <Clock className="w-3 h-3 mr-1" />
+                            {currentLanguage === 'ar' ? post.readTime : `${post.readTime} ${t('blog.minRead')}`}
+                          </span>
+                        </div>
+                      </CardContent>
+                      <CardFooter>
+                        <Button 
+                          variant="ghost" 
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 px-0"
+                        >
+                          {t('blog.readMore') || 'Read More'}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </motion.section>
 
@@ -363,7 +339,6 @@ export default function BlogPage() {
         </motion.section>
       </main>
 
-      <Footer />
     </div>
   )
 }

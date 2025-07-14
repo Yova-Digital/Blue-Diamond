@@ -126,9 +126,14 @@ const translations: Record<string, Record<string, string>> = {
     "blog.recentPosts": "Recent Posts",
     "blog.featuredPost": "Featured Post",
     "blog.latestInsights": "Latest Insights",
+    "blog.relatedTitle": "You might also like",
+    "blog.relatedDesc": "Explore more insightful articles on financial topics",
     "common.readMore": "Read More",
     "contact.availability": "Available",
-    "common.backToServices" : "Back to services"
+    "common.backToServices" : "Back to services",
+    "common.getStarted": "Get Started",
+    "blog.viewAll": "View All Articles",
+    "blog.minRead": "min read"
   },
   ar: {
     "nav.about": "من نحن",
@@ -137,7 +142,7 @@ const translations: Record<string, Record<string, string>> = {
     "nav.blog": "المدونة",
     "nav.home": "الرئيسية",
     "nav.language": "English",
-    "hero.title": "بلو دايموند لوسيط تمويل",
+    "hero.title": "بلو دايموند وسيط تمويل",
     "hero.subtitle": "طريقك نحو آفاق جديدة من التمويل الذكي",
     "hero.badge": "وسيط تمويل",
     "hero.description": "تمكين الشركات بحلول مالية مخصصة",
@@ -250,9 +255,14 @@ const translations: Record<string, Record<string, string>> = {
     "blog.recentPosts": "المقالات الأحدث",
     "blog.featuredPost": "المقالات المميزة",
     "blog.latestInsights": "آخر المقالات",
+    "blog.relatedTitle": "قد يعجبك أيضًا",
+    "blog.relatedDesc": "اكتشف المزيد من المقالات المالية المفيدة",
     "common.readMore": "اقرأ المزيد",
     "contact.availability": "متاح",
-    "common.backToServices": "الرجوع للخدمات"
+    "common.backToServices": "الرجوع للخدمات",
+    "common.getStarted": "ابدأ الآن",
+    "blog.viewAll": "عرض جميع المقالات",
+    "blog.minRead": "دقيقة قراءة"
   },
 }
 

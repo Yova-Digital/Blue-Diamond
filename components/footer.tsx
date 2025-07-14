@@ -4,10 +4,13 @@ import * as React from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from './language-provider';
 import { Building2, Mail, Phone, MapPin, Linkedin, Twitter } from 'lucide-react';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 
 export default function Footer() {
   const { t } = useLanguage();
+  const pathname = usePathname();
 
   return (
     <footer className="bg-gray-900 dark:bg-black text-white py-16">
@@ -83,45 +86,72 @@ export default function Footer() {
                 className="space-y-3"
               >
                 <li>
-                  <button
-                    onClick={() => {
-                      const element = document.getElementById("about");
-                      if (element) element.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
-                  >
-                    {t("nav.about")}
-                  </button>
+                  {pathname === "/" ? (
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById("about");
+                        if (element) element.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                    >
+                      {t("nav.about")}
+                    </button>
+                  ) : (
+                    <Link
+                      href="/#about"
+                      className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                    >
+                      {t("nav.about")}
+                    </Link>
+                  )}
                 </li>
                 <li>
-                  <button
-                    onClick={() => {
-                      const element = document.getElementById("services");
-                      if (element) element.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
-                  >
-                    {t("nav.services")}
-                  </button>
+                  {pathname === "/" ? (
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById("services");
+                        if (element) element.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                    >
+                      {t("nav.services")}
+                    </button>
+                  ) : (
+                    <Link
+                      href="/#services"
+                      className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                    >
+                      {t("nav.services")}
+                    </Link>
+                  )}
                 </li>
                 <li>
-                  <button
-                    onClick={() => {
-                      const element = document.getElementById("contact");
-                      if (element) element.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
-                  >
-                    {t("nav.contact")}
-                  </button>
+                  {pathname === "/" ? (
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById("contact");
+                        if (element) element.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                    >
+                      {t("nav.contact")}
+                    </button>
+                  ) : (
+                    <Link
+                      href="/#contact"
+                      className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                    >
+                      {t("nav.contact")}
+                    </Link>
+                  )}
                 </li>
                 <li>
-                  <a
+                  <Link
                     href="/blog"
                     className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
                   >
                     {t("nav.blog") || "Blog"}
-                  </a>
+                  </Link>
                 </li>
               </motion.ul>
             </div>

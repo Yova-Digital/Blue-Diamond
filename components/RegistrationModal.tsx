@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useLanguage } from './language-provider';
 
@@ -19,6 +19,18 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // منع التمرير عند فتح المودال
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -52,21 +64,22 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center p-4 text-center">
+    <div className="fixed inset-0 z-[9999] overflow-y-auto">
+      <div className="flex min-h-screen items-center justify-center p-4 text-center pt-24 sm:pt-0">
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity z-0"
           onClick={onClose}
         />
         
-        <div className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
+        <div className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all z-10">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
               {t('registration.title') || 'Register Now'}
             </h3>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 z-20"
+              style={{ position: 'relative' }}
             >
               <X className="h-6 w-6" />
             </button>

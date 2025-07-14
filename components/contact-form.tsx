@@ -7,7 +7,7 @@ import { Send, Phone, Mail, MapPin, MessageSquare, User, MailIcon, PhoneIcon } f
 
 const FloatingInput = ({ id, label, type = "text", value, onChange, placeholder, icon: Icon, required = false }: any) => {
   const [isFocused, setIsFocused] = useState(false)
-  
+
   return (
     <div className="relative w-full mb-6">
       <div className={`
@@ -34,8 +34,10 @@ const FloatingInput = ({ id, label, type = "text", value, onChange, placeholder,
           backdrop-blur-sm
         `}
         placeholder={placeholder}
+        dir={id === "phone" ? "ltr" : undefined}
+        style={id === "phone" ? { direction: "ltr", unicodeBidi: "isolate" } : undefined}
       />
-      <label 
+      <label
         htmlFor={id}
         className={`
           absolute left-12 px-1 -top-2.5 bg-white dark:bg-gray-900
@@ -51,7 +53,7 @@ const FloatingInput = ({ id, label, type = "text", value, onChange, placeholder,
 
 const FloatingTextarea = ({ id, label, value, onChange, placeholder, required = false }: any) => {
   const [isFocused, setIsFocused] = useState(false)
-  
+
   return (
     <div className="relative w-full mb-6">
       <div className={`
@@ -79,7 +81,7 @@ const FloatingTextarea = ({ id, label, value, onChange, placeholder, required = 
         `}
         placeholder={placeholder}
       />
-      <label 
+      <label
         htmlFor={id}
         className={`
           absolute left-12 px-1 -top-2.5 bg-white dark:bg-gray-900
@@ -93,24 +95,38 @@ const FloatingTextarea = ({ id, label, value, onChange, placeholder, required = 
   )
 }
 
-const ContactCard = ({ icon: Icon, title, value, color }: any) => (
-  <motion.div 
-    whileHover={{ y: -5 }}
-    className={`
-      flex items-start p-6 rounded-2xl backdrop-blur-sm
-      bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700
-      transition-all duration-300 hover:shadow-lg
-    `}
-  >
-    <div className={`p-3 rounded-xl ${color} text-white mr-4`}>
-      <Icon className="w-6 h-6" />
+// حذف ContactCard القديم واستبداله بمكون جديد للأيقونة فقط مع النسخ
+const ContactIcon = ({ icon: Icon, value, color, label }: { icon: any, value: string, color: string, label: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch (e) {
+      // يمكن إضافة معالجة خطأ هنا
+    }
+  };
+
+  return (
+    <div className="relative inline-block">
+      <button
+        onClick={handleCopy}
+        aria-label={label}
+        className={`group p-5 rounded-2xl ${color} text-white shadow-lg transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-400`}
+        type="button"
+      >
+        <Icon className="w-8 h-8" />
+      </button>
+      {copied && (
+        <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs rounded px-2 py-1 shadow-lg animate-fade-in-out z-20 whitespace-nowrap">
+          تم النسخ
+        </span>
+      )}
     </div>
-    <div>
-      <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{title}</h4>
-      <p className="text-gray-600 dark:text-gray-300">{value}</p>
-    </div>
-  </motion.div>
-)
+  );
+};
 
 export default function ContactForm() {
   const { t } = useLanguage()
@@ -147,13 +163,13 @@ export default function ContactForm() {
       message: "",
     })
     setIsSubmitting(false)
-    
+
     // Show success message
     const successEl = document.getElementById('success-message')
     if (successEl) {
       successEl.classList.remove('opacity-0', 'translate-y-4')
       successEl.classList.add('opacity-100', 'translate-y-0')
-      
+
       setTimeout(() => {
         successEl.classList.remove('opacity-100', 'translate-y-0')
         successEl.classList.add('opacity-0', 'translate-y-4')
@@ -193,8 +209,8 @@ export default function ContactForm() {
   }
 
   return (
-    <section 
-      id="contact" 
+    <section
+      id="contact"
       className="relative py-28 overflow-hidden bg-gradient-to-b from-gray-50 to-blue-50/30 dark:from-gray-900 dark:to-gray-800/50"
       ref={ref}
     >
@@ -226,40 +242,34 @@ export default function ContactForm() {
             initial="hidden"
             animate={controls}
             variants={containerVariants}
-            className="space-y-6"
+            className="space-y-6 flex flex-col items-center lg:items-start"
           >
             <motion.h3 variants={itemVariants} className="text-2xl font-bold text-gray-900 dark:text-white">
               {t("contact.getInTouch")}
             </motion.h3>
-            
+
             <motion.p variants={itemVariants} className="text-gray-600 dark:text-gray-300 mb-8">
               {t("contact.availability")}
             </motion.p>
-            
-            <motion.div variants={itemVariants}>
-              <ContactCard 
+
+            <motion.div variants={itemVariants} className="flex gap-8 mt-6">
+              <ContactIcon
                 icon={Phone}
-                title={t("contact.phoneLabel")}
-                value="+971 50 6347214"
+                value={"+971 50 6347214"}
                 color="bg-blue-500"
+                label={t("contact.phoneLabel")}
               />
-            </motion.div>
-            
-            <motion.div variants={itemVariants}>
-              <ContactCard 
+              <ContactIcon
                 icon={Mail}
-                title={t("contact.emailLabel")}
-                value="info@bluediamond.ae"
+                value={"info@bluediamond.ae"}
                 color="bg-emerald-500"
+                label={t("contact.emailLabel")}
               />
-            </motion.div>
-            
-            <motion.div variants={itemVariants}>
-              <ContactCard 
+              <ContactIcon
                 icon={MapPin}
-                title={t("contact.locationLabel")}
                 value={t("contact.location")}
                 color="bg-amber-500"
+                label={t("contact.locationLabel")}
               />
             </motion.div>
           </motion.div>
@@ -274,7 +284,7 @@ export default function ContactForm() {
             <div className="relative bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-xl border border-gray-100 dark:border-gray-700">
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-blue-500/10 rounded-full -z-10"></div>
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-emerald-500/10 rounded-full -z-10"></div>
-              
+
               <form onSubmit={handleSubmit} className="relative z-10">
                 <FloatingInput
                   id="name"
@@ -285,7 +295,7 @@ export default function ContactForm() {
                   icon={User}
                   required
                 />
-                
+
                 <div className="grid md:grid-cols-2 gap-6">
                   <FloatingInput
                     id="email"
@@ -297,7 +307,7 @@ export default function ContactForm() {
                     icon={MailIcon}
                     required
                   />
-                  
+
                   <FloatingInput
                     id="phone"
                     type="tel"
@@ -309,7 +319,7 @@ export default function ContactForm() {
                     required
                   />
                 </div>
-                
+
                 <FloatingInput
                   id="subject"
                   label={t("contact.subject")}
@@ -319,7 +329,7 @@ export default function ContactForm() {
                   icon={MessageSquare}
                   required
                 />
-                
+
                 <FloatingTextarea
                   id="message"
                   label={t("contact.message")}
@@ -328,14 +338,14 @@ export default function ContactForm() {
                   placeholder="Tell us about your financing needs..."
                   required
                 />
-                
+
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
                   className={`
                     relative w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold 
                     rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105
-                    flex items-center justify-center space-x-2 overflow-hidden group
+                    flex items-center justify-center gap-x-2 overflow-hidden group
                     ${isSubmitting ? 'opacity-80 cursor-not-allowed' : ''}
                   `}
                   whileHover={{ scale: 1.02 }}
@@ -359,9 +369,9 @@ export default function ContactForm() {
                   </span>
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </motion.button>
-                
+
                 {/* Success Message */}
-                <motion.div 
+                <motion.div
                   id="success-message"
                   initial={{ opacity: 0, y: 20 }}
                   className="mt-6 p-4 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg text-sm transition-all duration-500 opacity-0 translate-y-4"

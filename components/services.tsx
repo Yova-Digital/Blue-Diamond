@@ -183,7 +183,7 @@ export default function Services() {
         >
           <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 text-blue-600 dark:text-blue-400 text-base font-semibold mb-8 border-2 border-blue-200 dark:border-blue-800 shadow-lg">
             <span className="mr-2">✨</span>
-            {t("services.subtitle")}
+            {t("services.subtitle")}  
             <span className="ml-2">✨</span>
           </div>
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400">
