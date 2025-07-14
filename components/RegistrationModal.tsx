@@ -20,7 +20,7 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // منع التمرير عند فتح المودال
+  // Lock scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';

@@ -7,7 +7,7 @@ import { useLanguage } from "@/components/language-provider"
 import { Calendar, User, ArrowRight, Sparkles, Star, Clock, Tag, MessageSquare, Search, ChevronRight, BookOpen } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import {  useRef, useState } from "react"
+import {  useRef, useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 // Function to detect if text is Arabic
@@ -32,6 +32,7 @@ const getArticleLanguage = (title: string, description: string): 'en' | 'ar' => 
   return 'en';
 };
 
+// أعد إضافة مصفوفة التدوينات الثابتة blogsEn هنا
 const blogsEn = [
   {
     slug: "future-of-corporate-finance-uae",
@@ -99,21 +100,67 @@ const blogsEn = [
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
     comments: 14
   }
-]
+];
 
 export default function BlogPage() {
   const { t, currentLanguage } = useLanguage()
-  
-  // Combine all blogs and detect their language
-  const allBlogs = [...blogsEn].map(blog => ({
-    ...blog,
-    language: getArticleLanguage(blog.title, blog.description)
-  }));
-  
+  const [backendBlogs, setBackendBlogs] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  // blogsEn: التدوينات الثابتة القديمة (لا تحذفها)
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await fetch("http://localhost:8080/api/blogs")
+        const data = await res.json()
+        setBackendBlogs(data.filter((b: any) => b.published))
+      } catch (err) {
+        setBackendBlogs([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchBlogs()
+  }, [])
+
+  // دمج التدوينات الثابتة مع الديناميكية
+  const allBlogs = [
+    ...blogsEn.map(blog => ({
+      ...blog,
+      language: getArticleLanguage(blog.title, blog.description),
+      isStatic: true,
+      createdAt: blog.date ? new Date(blog.date).toISOString() : "1970-01-01T00:00:00.000Z",
+    })),
+    ...backendBlogs.map(blog => ({
+      ...blog,
+      slug: blog.slug || (blog.title ? blog.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '') : undefined),
+      language: getArticleLanguage(blog.title, blog.excerpt),
+      isStatic: false,
+      createdAt: blog.createdAt ? new Date(blog.createdAt).toISOString() : "1970-01-01T00:00:00.000Z",
+    }))
+  ];
+
+  console.log("backendBlogs", backendBlogs)
+  console.log("allBlogs", allBlogs)
+
   // Sort blogs by date (newest first) and get featured and recent posts
-  const sortedBlogs = allBlogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sortedBlogs = allBlogs.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   const featuredPost = sortedBlogs[0];
   const recentPosts = sortedBlogs.slice(1, 7); // Show 6 recent posts
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+  if (!allBlogs.length) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500 text-xl">لا توجد تدوينات متاحة حالياً</div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/20">
@@ -173,56 +220,57 @@ export default function BlogPage() {
             <Star className="w-6 h-6 text-yellow-400 mr-2" />
             {t('blog.featuredPost') || 'Featured Post'}
           </h2>
-          
-          <Link href={`/blog/${featuredPost.slug}`} className="block group">
-            <Card className="overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300">
-              <div className="md:flex">
-                <div className="md:flex-shrink-0 md:w-1/2 h-64 md:h-auto relative overflow-hidden">
-                  <Image
-                    src={featuredPost.image}
-                    alt={featuredPost.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <div className="absolute top-4 right-4 bg-white/90 dark:bg-gray-900/90 px-3 py-1 rounded-full text-xs font-medium text-blue-800 dark:text-blue-200 flex items-center">
-                    <Tag className="w-3 h-3 mr-1" />
-                    {featuredPost.category}
+          {featuredPost?.slug && (
+            <Link href={`/blog/${featuredPost.slug}`} className="block group">
+              <Card className="overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300">
+                <div className="md:flex">
+                  <div className="md:flex-shrink-0 md:w-1/2 h-64 md:h-auto relative overflow-hidden">
+                    <Image
+                      src={featuredPost.image?.startsWith("/uploads") ? `http://localhost:8080${featuredPost.image}` : featuredPost.image}
+                      alt={featuredPost.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    <div className="absolute top-4 right-4 bg-white/90 dark:bg-gray-900/90 px-3 py-1 rounded-full text-xs font-medium text-blue-800 dark:text-blue-200 flex items-center">
+                      <Tag className="w-3 h-3 mr-1" />
+                      {featuredPost.category}
+                    </div>
+                  </div>
+                  <div className="p-8 md:w-1/2 flex flex-col justify-center">
+                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+                      <span className="flex items-center mr-4">
+                        <User className="w-4 h-4 mr-1" />
+                        {featuredPost.author}
+                      </span>
+                      <span className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {featuredPost.date}
+                      </span>
+                    </div>
+                    <h3
+                      className={`text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors ${isArabic(featuredPost.title) ? "text-right" : "text-left"}`}
+                      dir={isArabic(featuredPost.title) ? "rtl" : "ltr"}
+                    >
+                      {featuredPost.title}
+                    </h3>
+                    <p
+                      className={`text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 ${isArabic(featuredPost.description) ? "text-right" : "text-left"}`}
+                      dir={isArabic(featuredPost.description) ? "rtl" : "ltr"}
+                    >
+                      {featuredPost.description}
+                    </p>
+                    <div className="flex items-center justify-between mt-auto">
+                      <span className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <Clock className="w-4 h-4 mr-1" />
+                        {currentLanguage === 'ar' ? featuredPost.readTime : `${featuredPost.readTime} ${t('blog.minRead')}`}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className="p-8 md:w-1/2 flex flex-col justify-center">
-                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
-                    <span className="flex items-center mr-4">
-                      <User className="w-4 h-4 mr-1" />
-                      {featuredPost.author}
-                    </span>
-                    <span className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {featuredPost.date}
-                    </span>
-                  </div>
-                  <h3
-                    className={`text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors ${isArabic(featuredPost.title) ? "text-right" : "text-left"}`}
-                    dir={isArabic(featuredPost.title) ? "rtl" : "ltr"}
-                  >
-                    {featuredPost.title}
-                  </h3>
-                  <p
-                    className={`text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 ${isArabic(featuredPost.description) ? "text-right" : "text-left"}`}
-                    dir={isArabic(featuredPost.description) ? "rtl" : "ltr"}
-                  >
-                    {featuredPost.description}
-                  </p>
-                  <div className="flex items-center justify-between mt-auto">
-                    <span className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                      <Clock className="w-4 h-4 mr-1" />
-                      {currentLanguage === 'ar' ? featuredPost.readTime : `${featuredPost.readTime} ${t('blog.minRead')}`}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </Link>
+              </Card>
+            </Link>
+          )}
         </motion.section>
 
         {/* Recent Posts */}
@@ -237,7 +285,7 @@ export default function BlogPage() {
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {recentPosts.map((post, index) => {
+            {recentPosts.filter(post => !!post.slug).map((post, index) => {
               const cardDir = isArabic(post.title) ? "rtl" : "ltr";
               return (
                 <motion.div
@@ -254,7 +302,7 @@ export default function BlogPage() {
                     >
                       <div className="relative h-48 w-full">
                         <Image
-                          src={post.image}
+                          src={post.image?.startsWith("/uploads") ? `http://localhost:8080${post.image}` : post.image}
                           alt={post.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
