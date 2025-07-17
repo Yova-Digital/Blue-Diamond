@@ -22,6 +22,13 @@ export default function Hero() {
     }
   }
 
+  const scrollToRegister = () => {
+    const element = document.getElementById("register");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/10">
       {/* Subtle Background Image */}
@@ -102,18 +109,13 @@ export default function Hero() {
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-900 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </button>
                 <button 
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={scrollToRegister}
                   className="group relative px-8 py-4 border-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 font-semibold rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 hover:shadow-md"
                 >
                   <span className="relative z-10 flex items-center justify-center">
                     {t("hero.secondaryCta")}
                   </span>
                 </button>
-                
-                <RegistrationModal 
-                  isOpen={isModalOpen} 
-                  onClose={() => setIsModalOpen(false)} 
-                />
               </motion.div>
 
             </motion.div>

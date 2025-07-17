@@ -1,4 +1,5 @@
 import Hero from "@/components/hero"
+import RegistrationSection from "@/components/RegistrationSection"
 import Features from "@/components/features"
 import About from "@/components/about"
 import Services from "@/components/services"
@@ -8,6 +9,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <Hero />
+      <RegistrationSection />
       <Services />
       <About />
       <Features />
