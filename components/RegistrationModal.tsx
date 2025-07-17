@@ -48,8 +48,8 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
     try {
       // Send email using EmailJS
       await emailjs.send(
-        'service_m77s3', // Service ID
-        'template_7b036g', // Template ID
+        'service_m77xks3', // Service ID
+        'template_7b036pg', // Template ID
         {
           fullName: formData.fullName,
           email: formData.email,

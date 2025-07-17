@@ -157,8 +157,8 @@ export default function ContactForm() {
     try {
       // Send email using EmailJS
       await emailjs.send(
-        'service_m77s3', // Service ID
-        'template_7b36g', // Template ID
+        'service_m77xks3', // Service ID
+        'template_7b036pg', // Template ID
         {
           fullName: formData.name, // Using name as fullName for template
           email: formData.email,
