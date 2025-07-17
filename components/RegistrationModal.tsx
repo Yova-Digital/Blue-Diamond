@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useLanguage } from './language-provider';
+import emailjs from '@emailjs/browser';
 
 interface RegistrationModalProps {
   isOpen: boolean;
@@ -45,14 +46,33 @@ export default function RegistrationModal({ isOpen, onClose }: RegistrationModal
     setIsSubmitting(true);
     
     try {
-      // Here you would typically send the form data to your backend
-      console.log('Form submitted:', formData);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Show success message or redirect
+      // Send email using EmailJS
+      await emailjs.send(
+        'service_m77s3', // Service ID
+        'template_7b036g', // Template ID
+        {
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          date: new Date().toLocaleString(),
+        },
+        'WgosXKTCh0k4qROqR' // Replace with your actual public key
+      );
+
+      // Show success message
       alert(t('registration.success') || 'Registration successful! We will contact you soon.');
       onClose();
+      
+      // Reset form
+      setFormData({
+        fullName: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
     } catch (error) {
       console.error('Error submitting form:', error);
       alert(t('registration.error') || 'An error occurred. Please try again.');

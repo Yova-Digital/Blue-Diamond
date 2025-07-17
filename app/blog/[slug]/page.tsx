@@ -788,13 +788,6 @@ export default function BlogPostPage() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-gray-500 dark:text-gray-400 text-sm">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center">
-                    <div className="w-8 h-8 rounded-full overflow-hidden mr-3 border-2 border-white dark:border-gray-700 shadow">
-                      <img 
-                        src={blog.authorImage?.startsWith("/uploads") ? `http://localhost:8080${blog.authorImage}` : blog.authorImage || '/placeholder-user.jpg'} 
-                        alt={blog.author}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
                     <span className="font-medium text-gray-700 dark:text-gray-200">{blog.author}</span>
                   </div>
                   <span className="hidden sm:block">•</span>
