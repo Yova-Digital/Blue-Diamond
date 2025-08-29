@@ -10,8 +10,6 @@ import { motion } from 'framer-motion';
 const serviceDetails = {
   'real-estate': {
     icons: [Building],
-    title: { en: 'Real Estate Financing', ar: 'تمويل العقارات' },
-    description: { en: 'Tailored property financing solutions for investors and developers', ar: 'حلول تمويل عقاري مخصصة للمستثمرين والمطورين' },
     color: 'from-blue-500 to-blue-600',
     features: [
       { en: 'Customized financing solutions for all property types', ar: 'حلول تمويلية مخصصة لجميع أنواع العقارات' },
@@ -28,25 +26,20 @@ const serviceDetails = {
   // Add other services with similar structure
   'refinancing': {
     icons: [RefreshCw],
-    title: { en: 'Refinancing Solutions', ar: 'حلول تمويل التمويل' },
-    description: { en: 'Optimize your existing loans and credit facilities', ar: 'تحسين مؤقتاتك القروض والمنشطات المالية' },
     color: 'from-emerald-500 to-teal-600',
     features: [
-      { en: 'Lower your interest rates', ar: 'تخفيف أسعار الفائدة' },
-      { en: 'Extend loan terms', ar: 'تمديد أجل القروض' },
-      { en: 'Consolidate debt', ar: 'تجميع الديون' },
-      { en: 'Improve cash flow', ar: 'تحسين التدفق النقدي' },
-      { en: 'Expert financial analysis', ar: 'تحليل مالي خبير' }
+      { en: 'Access liquidity without selling assets', ar: 'الحصول على سيولة دون بيع الأصول' },
+      { en: 'Fund new projects or investments', ar: 'تمويل مشاريع أو استثمارات جديدة' },
+      { en: 'Flexible and fast financing terms', ar: 'شروط تمويل مرنة وسريعة' },
+      { en: 'Bolster working capital', ar: 'دعم رأس المال العامل' },
+      { en: 'Favorable financing terms', ar: 'شروط تمويلية مواتية' }
     ],
     content: [
-      { en: 'Our refinancing solutions help businesses optimize their financial position by securing better terms on existing loans and credit facilities. We analyze your current financial obligations and negotiate with lenders to reduce costs and improve cash flow.', ar: 'حلول تمويل التمويل لدينا تساعد الشركات في تحسين موقفها المالي من خلال الحصول على شروط أفضل على القروض والمنشطات المالية الحالية. نحن نحلل التزاماتك المالية الحالية ونتفاوض مع الممولين لتقليل التكاليف وتحسين التدفق النقدي.' },
-      { en: 'With access to a wide network of lenders, we can help you find the best refinancing options tailored to your specific needs and financial goals.', ar: 'مع وجود شبكة واسعة من الممولين، يمكننا مساعدتك في العثور على أفضل خيارات تمويل التمويل المناسبة لاحتياجاتك وأهدافك المالية.' }
+      { en: 'Unlock the equity in your existing real estate assets through our cash-out refinancing solutions. Ideal for developers and investors, this service allows you to extract liquidity without selling off properties. You can reinvest the funds into new ventures or use them to bolster working capital, all while benefiting from favorable financing terms and efficient execution.', ar: 'نُساعدكم على تحرير السيولة من أصولكم العقارية القائمة دون الحاجة إلى بيعها، عبر حلول إعادة تمويل فعالة. يمكن استخدام هذه السيولة في مشاريع جديدة أو لدعم رأس المال العامل، مع الاستفادة من شروط تمويلية مرنة وسريعة.' }
     ]
   },
   'corporate': {
     icons: [Briefcase],
-    title: { en: 'Corporate Financing', ar: 'تمويل الشركات' },
-    description: { en: 'Comprehensive financial solutions for businesses of all sizes', ar: 'حلول مالية كاملة للشركات بجميع الأحجام' },
     color: 'from-purple-500 to-indigo-600',
     features: [
       { en: 'Business expansion financing', ar: 'تمويل توسيع الأعمال' },
@@ -62,8 +55,6 @@ const serviceDetails = {
   },
   'construction': {
     icons: [Hammer],
-    title: { en: 'Construction Financing', ar: 'تمويل الإنشاءات' },
-    description: { en: 'Tailored financing solutions for construction projects', ar: 'حلول تمويلية مخصصة لمشاريع الإنشاءات' },
     color: 'from-amber-500 to-orange-600',
     features: [
       { en: 'New construction financing', ar: 'تمويل الإنشاءات الجديدة' },
@@ -79,8 +70,6 @@ const serviceDetails = {
   },
   'acquisition': {
     icons: [Handshake], // Only Handshake icon
-    title: { en: 'Acquisition Financing', ar: 'تمويل الاستحواذ' },
-    description: { en: 'Strategic financing for business and asset acquisitions', ar: 'تمويل استراتيجي للاستحواذات التجارية والأصول' },
     color: 'from-rose-500 to-pink-600',
     features: [
       { en: 'Business acquisition loans', ar: 'قروض استحواذ الشركات' },
@@ -96,8 +85,6 @@ const serviceDetails = {
   },
   'trade': {
     icons: [Ship],
-    title: { en: 'Trade Finance', ar: 'تمويل التجارة' },
-    description: { en: 'Solutions for international trade and commerce', ar: 'حلول للتجارة الدولية والتجارة' },
     color: 'from-cyan-500 to-blue-600',
     features: [
       { en: 'Letters of credit', ar: 'أوراق الائتمان' },
@@ -113,15 +100,13 @@ const serviceDetails = {
   },
   'restructuring': {
     icons: [RotateCw],
-    title: { en: 'Debt Restructuring', ar: 'تصميم الديون' },
-    description: { en: 'Strategic solutions for financial restructuring', ar: 'حلول استراتيجية لتصميم الديون' },
     color: 'from-violet-500 to-purple-600',
     features: [
       { en: 'Debt consolidation', ar: 'تجميع الديون' },
       { en: 'Loan modifications', ar: 'تعديل القروض' },
-      { en: 'Refinancing solutions', ar: 'حلول تمويل التمويل' },
-      { en: 'Payment restructuring', ar: 'تصميم الدفع' },
-      { en: 'Financial restructuring advisory', ar: 'استشارات تصميم الديون' }
+      { en: 'Refinancing solutions', ar: 'حلول إعادة التمويل' },
+      { en: 'Payment restructuring', ar: 'إعادة هيكلة الدفعات' },
+      { en: 'Financial restructuring advisory', ar: 'استشارات إعادة الهيكلة المالية' }
     ],
     content: [
       { en: 'Our debt restructuring services help businesses facing financial challenges by providing strategic solutions to improve cash flow and ensure long-term sustainability.', ar: 'خدمات تصميم الديون لدينا تساعد الشركات التي تواجه تحديات مالية على تقديم حلول استراتيجية لتحسين التدفق النقدي وضمان الاستمرارية الطويلة المدى.' },
@@ -132,7 +117,20 @@ const serviceDetails = {
 
 export default function ServiceDetailPage({ params }: { params: { slug: string } }) {
   const { t, language } = useLanguage();
+  // Map URL slugs to translation keys
+  const slugToTranslationKey: Record<string, string> = {
+    'real-estate': 'realEstate',
+    'refinancing': 'refinancing',
+    'construction': 'construction',
+    'corporate': 'corporate',
+    'acquisition': 'acquisition',
+    'trade': 'trade',
+    'restructuring': 'restructuring'
+  };
+  
+  const translationKey = slugToTranslationKey[params.slug] || params.slug;
   const service = serviceDetails[params.slug as keyof typeof serviceDetails];
+  const isRTL = language === 'ar';
   
   if (!service) {
     notFound();
@@ -162,8 +160,12 @@ export default function ServiceDetailPage({ params }: { params: { slug: string }
               ))}
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{service.title[language]}</h1>
-              <p className="text-lg md:text-xl opacity-90 max-w-2xl">{service.description[language]}</p>
+              <h1 className="text-4xl md:text-6xl font-bold text-white text-center leading-tight">
+                {t(`services.${translationKey}`)}
+              </h1>
+              <p className="text-lg md:text-xl opacity-90 max-w-2xl">
+                {t(`services.${translationKey}Desc`)}
+              </p>
             </div>
           </div>
         </div>

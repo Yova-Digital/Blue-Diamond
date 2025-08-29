@@ -13,6 +13,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
 
+// Define the interface for a blog post
+interface Blog {
+  _id?: string;
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+  category: string;
+  readTime: number;
+  image?: string;
+  authorImage?: string;
+  comments?: number;
+  content: string;
+  tags: string[];
+  published?: boolean;
+}
+
 // أضف مصفوفة التدوينات الثابتة blogsEn هنا
 const blogsEn = [
   {
@@ -478,9 +496,9 @@ export default function BlogPostPage() {
   const { t } = useLanguage()
   const router = useRouter()
 
-  const [blog, setBlog] = useState<any | null>(null)
+  const [blog, setBlog] = useState<Blog | null>(null)
   const [loading, setLoading] = useState(true)
-  const [allBlogs, setAllBlogs] = useState<any[]>([])
+  const [allBlogs, setAllBlogs] = useState<Blog[]>([])
 
   useEffect(() => {
     // ابحث أولاً في blogsEn
@@ -496,12 +514,12 @@ export default function BlogPostPage() {
       try {
         const res = await fetch("http://localhost:8080/api/blogs")
         const data = await res.json()
-        const publishedBlogs = data.filter((b: any) => b.published).map(blog => ({
+        const publishedBlogs = data.filter((b: any) => b.published).map((blog: Blog) => ({
           ...blog,
           slug: blog.slug || (blog.title ? blog.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '') : undefined),
         }));
         setAllBlogs([...blogsEn, ...publishedBlogs])
-        const found = publishedBlogs.find((b: any) => b.slug === slug)
+        const found = publishedBlogs.find((b: Blog) => b.slug === slug)
         setBlog(found || null)
       } catch (err) {
         setBlog(null)
@@ -512,51 +530,14 @@ export default function BlogPostPage() {
     fetchBlog()
   }, [slug])
 
-  // State for table of contents
-  const [headings, setHeadings] = useState<{id: string, text: string, level: number}[]>([]);
-  const [activeId, setActiveId] = useState<string>('');
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [progress, setProgress] = useState(0);
   const [comment, setComment] = useState('');
   const [showComments, setShowComments] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Generate table of contents from headings
+  // Set up scroll progress
   useEffect(() => {
-    if (contentRef.current) {
-      const elements = Array.from(contentRef.current.querySelectorAll('h2, h3'));
-      const headingsList = elements.map((element) => ({
-        id: element.id || element.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '') || '',
-        text: element.textContent || '',
-        level: parseInt(element.tagName.substring(1))
-      }));
-      setHeadings(headingsList);
-      
-      // Add IDs to headings for anchor links
-      elements.forEach((element, index) => {
-        if (!element.id) {
-          element.id = `section-${index}`;
-        }
-      });
-    }
-    
-    // Set up intersection observer for active TOC item highlighting
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-            setActiveId(entry.target.id);
-          }
-        });
-      },
-      { threshold: [0, 0.5, 1.0], rootMargin: '0px 0px -50% 0px' }
-    );
-
-    // Observe all headings
-    const headings = document.querySelectorAll('h2, h3');
-    headings.forEach((heading) => observer.observe(heading));
-
-    // Set up scroll progress
     const handleScroll = () => {
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -567,21 +548,10 @@ export default function BlogPostPage() {
 
     window.addEventListener('scroll', handleScroll);
     return () => {
-      observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [blog?.content]);
+  }, []);
 
-  // Scroll to section
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 100,
-        behavior: 'smooth'
-      });
-    }
-  };
 
   // Handle comment submission
   const handleCommentSubmit = (e: React.FormEvent) => {
@@ -837,32 +807,7 @@ export default function BlogPostPage() {
         {/* Article Content */}
         <section className="relative py-12 md:py-16 bg-white dark:bg-gray-900">
           <div className="container mx-auto px-4 max-w-6xl">
-            <div className="flex flex-col lg:flex-row gap-8">
-              {/* Table of Contents */}
-              {headings.length > 0 && (
-                <div className="lg:w-64 flex-shrink-0 hidden lg:block">
-                  <div className="sticky top-24">
-                    <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 px-2">ON THIS PAGE</div>
-                    <nav className="space-y-2 border-l border-gray-200 dark:border-gray-700 pl-4">
-                      {headings.map((heading) => (
-                        <button
-                          key={heading.id}
-                          onClick={() => scrollToSection(heading.id)}
-                          className={`block text-left w-full px-3 py-1.5 text-sm rounded-md transition-colors ${
-                            activeId === heading.id
-                              ? 'text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/30'
-                              : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50'
-                          } ${heading.level === 3 ? 'pl-6 text-sm' : 'pl-3 font-medium'}`}
-                        >
-                          {heading.text}
-                        </button>
-                      ))}
-                    </nav>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex-1">
+            <div className="w-full max-w-4xl mx-auto">
                 <motion.article 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -881,7 +826,7 @@ export default function BlogPostPage() {
                     className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"
                   >
                     <div className="flex flex-wrap gap-2">
-                      {blog.tags.map((tag, index) => (
+                      {blog.tags.map((tag: string, index: number) => (
                         <span 
                           key={index}
                           className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors cursor-pointer"
@@ -893,9 +838,7 @@ export default function BlogPostPage() {
                     </div>
                   </motion.div>
                 )}
-
               </div>
-            </div>
           </div>
         </section>
 

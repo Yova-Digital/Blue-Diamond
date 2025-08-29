@@ -110,7 +110,7 @@ export default function Hero() {
                 </button>
                 <button 
                   onClick={scrollToRegister}
-                  className="group relative px-8 py-4 border-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 font-semibold rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 hover:shadow-md"
+                  className="group relative px-8 py-4 border-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 font-semibold rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                 >
                   <span className="relative z-10 flex items-center justify-center">
                     {t("hero.secondaryCta")}

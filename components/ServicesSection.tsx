@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { useLanguage } from "./language-provider";
 import Link from "next/link";
-import { Building, RefreshCw, Hammer, Briefcase, ShoppingCart, Ship, RotateCcw, ArrowRight } from "lucide-react";
+import { Building, RefreshCw, Hammer, Briefcase, Ship, RotateCcw, ArrowRight } from "lucide-react";
 
 interface ServiceCardProps {
   service: {
@@ -155,13 +155,6 @@ export default function ServicesSection() {
       description: t("services.corporateDesc") || 'Comprehensive financing solutions for businesses of all sizes',
       color: "from-purple-500 to-indigo-600",
       slug: "corporate"
-    },
-    {
-      icon: ShoppingCart,
-      title: t("services.acquisition") || 'Business Acquisition',
-      description: t("services.acquisitionDesc") || 'Financing solutions for business acquisitions and mergers',
-      color: "from-rose-500 to-pink-600",
-      slug: "acquisition"
     },
     {
       icon: Ship,

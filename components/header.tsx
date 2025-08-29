@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { useTheme } from "next-themes"
 import { useLanguage } from "./language-provider"
-import { Moon, Sun, Menu, X, Globe } from "lucide-react"
+import { Moon, Sun, Menu, X, Globe, Gem } from "lucide-react"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -32,10 +32,21 @@ export default function Header() {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
+          {/* Mobile Menu Toggle - Position changes based on language */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={`md:hidden p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ${language === 'ar' ? 'order-3' : 'order-1'}`}
+          >
+            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+
           {/* Logo */}
-          <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center shadow-lg">
-              <div className="w-6 h-6 bg-white rounded-sm transform rotate-45"></div>
+          <motion.div 
+            whileHover={{ scale: 1.05 }} 
+            className={`flex items-center space-x-2 ${language === 'ar' ? 'mr-auto' : 'ml-auto md:ml-0'} md:mr-0`}
+          >
+            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-lg border border-gray-200 dark:border-gray-700">
+              <Gem className="w-6 h-6 text-blue-600" />
             </div>
             <div className="hidden md:block">
               <h1 className="text-xl font-bold text-gray-900 dark:text-white">Blue Diamond</h1>
@@ -102,14 +113,7 @@ export default function Header() {
               {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
-            >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+            </div>
         </div>
 
         {/* Mobile Navigation */}
