@@ -11,12 +11,18 @@ interface BlogPost {
   _id: string;
   slug: string;
   title: string;
+  titleAr?: string;
   description: string;
   excerpt: string;
+  excerptAr?: string;
   content: string;
+  contentAr?: string;
   date: string;
   author: string;
+  authorAr?: string;
+  authorImage?: string;
   category: string;
+  categoryAr?: string;
   readTime: number;
   image: string;
   comments: number;
@@ -24,30 +30,10 @@ interface BlogPost {
   createdAt: string;
   updatedAt: string;
   tags?: string[];
+  tagsAr?: string[];
   language?: 'en' | 'ar';
 }
 
-// Static fallback data
-const staticBlogs: BlogPost[] = [
-  {
-    _id: '1',
-    slug: 'future-of-corporate-finance-uae',
-    title: 'The Future of Corporate Finance in the UAE',
-    description: 'Explore the latest trends and opportunities in corporate finance.',
-    excerpt: 'Explore the latest trends and opportunities in corporate finance.',
-    content: 'Full content here...',
-    date: '2024-06-01',
-    author: 'Blue Diamond Team',
-    category: 'Finance',
-    readTime: 5,
-    image: 'https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2065&q=80',
-    comments: 12,
-    published: true,
-    createdAt: '2024-06-01T00:00:00.000Z',
-    updatedAt: '2024-06-01T00:00:00.000Z',
-    language: 'en'
-  }
-];
 
 export default function BlogPage() {
   const { t, language } = useLanguage();
@@ -64,11 +50,11 @@ export default function BlogPage() {
         const data = await response.json();
         // Filter out any unpublished blogs
         const publishedBlogs = Array.isArray(data) ? data.filter(blog => blog.published) : [];
-        setBlogs(publishedBlogs.length > 0 ? publishedBlogs : staticBlogs);
+        setBlogs(publishedBlogs);
       } catch (err) {
         console.error('Error fetching blogs:', err);
         setError('Failed to load blog posts');
-        setBlogs(staticBlogs);
+        setBlogs([]);
       } finally {
         setLoading(false);
       }
@@ -105,28 +91,44 @@ export default function BlogPage() {
 
     return (
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {blogs.map((blog) => (
-          <Link key={blog._id} href={`/blog/${blog.slug}`}>
-            <Card className="h-full hover:shadow-lg transition-shadow">
-              <div className="h-48 relative">
-                <Image
-                  src={blog.image}
-                  alt={blog.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <CardHeader>
-                <div className="flex items-center text-sm text-gray-500 mb-2">
-                  <Calendar className="w-4 h-4 mr-1" />
-                  {new Date(blog.date || blog.createdAt).toLocaleDateString()}
+        {blogs.map((blog) => {
+          const displayTitle = language === 'ar' && blog.titleAr ? blog.titleAr : blog.title;
+          const displayExcerpt = language === 'ar' && blog.excerptAr ? blog.excerptAr : blog.excerpt;
+          const displayAuthor = language === 'ar' && blog.authorAr ? blog.authorAr : blog.author;
+          const displayCategory = language === 'ar' && blog.categoryAr ? blog.categoryAr : blog.category;
+          
+          return (
+            <Link key={blog._id} href={`/blog/${blog.slug}`}>
+              <Card className="h-full hover:shadow-lg transition-shadow">
+                <div className="h-48 relative">
+                  <Image
+                    src={blog.image?.startsWith("/uploads") ? `http://localhost:8080${blog.image}` : blog.image}
+                    alt={displayTitle}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-                <CardTitle>{blog.title}</CardTitle>
-                <CardDescription>{blog.description}</CardDescription>
-              </CardHeader>
-            </Card>
-          </Link>
-        ))}
+                <CardHeader>
+                  <div className="flex items-center text-sm text-gray-500 mb-2">
+                    <Calendar className="w-4 h-4 mr-1" />
+                    {new Date(blog.date || blog.createdAt).toLocaleDateString()}
+                  </div>
+                  <CardTitle className={isRTL ? "text-right" : "text-left"} dir={isRTL ? "rtl" : "ltr"}>
+                    {displayTitle}
+                  </CardTitle>
+                  <CardDescription className={isRTL ? "text-right" : "text-left"} dir={isRTL ? "rtl" : "ltr"}>
+                    {displayExcerpt}
+                  </CardDescription>
+                  {displayCategory && (
+                    <div className="text-xs text-blue-600 font-medium mt-2">
+                      {displayCategory}
+                    </div>
+                  )}
+                </CardHeader>
+              </Card>
+            </Link>
+          );
+        })}
       </div>
     );
   };

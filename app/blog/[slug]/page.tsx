@@ -18,16 +18,23 @@ interface Blog {
   _id?: string;
   slug: string;
   title: string;
+  titleAr?: string;
   description: string;
+  excerpt?: string;
+  excerptAr?: string;
   date: string;
   author: string;
+  authorAr?: string;
   category: string;
+  categoryAr?: string;
   readTime: number;
   image?: string;
   authorImage?: string;
   comments?: number;
   content: string;
+  contentAr?: string;
   tags: string[];
+  tagsAr?: string[];
   published?: boolean;
 }
 
@@ -493,7 +500,7 @@ const isArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
 
 export default function BlogPostPage() {
   const { slug } = useParams()
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const router = useRouter()
 
   const [blog, setBlog] = useState<Blog | null>(null)
@@ -688,7 +695,16 @@ export default function BlogPostPage() {
       b.slug !== blog.slug
     )
     .slice(0, 2);
-  const articleDir = isArabic(blog.title) ? "rtl" : "ltr";
+  
+  // Get content based on language preference
+  const displayTitle = language === 'ar' && blog.titleAr ? blog.titleAr : blog.title;
+  const displayDescription = language === 'ar' && blog.excerptAr ? blog.excerptAr : (blog.description || blog.excerpt);
+  const displayContent = language === 'ar' && blog.contentAr ? blog.contentAr : blog.content;
+  const displayAuthor = language === 'ar' && blog.authorAr ? blog.authorAr : blog.author;
+  const displayCategory = language === 'ar' && blog.categoryAr ? blog.categoryAr : blog.category;
+  const displayTags = language === 'ar' && blog.tagsAr ? blog.tagsAr : blog.tags;
+  
+  const articleDir = isArabic(displayTitle) ? "rtl" : "ltr";
 
   return (
     <AnimatePresence>
@@ -740,25 +756,25 @@ export default function BlogPostPage() {
             >
               <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-sm font-medium mb-6">
                 <Tag className="w-3.5 h-3.5 mr-1.5" />
-                {blog.category}
+                {displayCategory}
               </div>
               <h1
-                className={`text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6 ${isArabic(blog.title) ? "text-right" : "text-left"}`}
-                dir={isArabic(blog.title) ? "rtl" : "ltr"}
+                className={`text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6 ${isArabic(displayTitle) ? "text-right" : "text-left"}`}
+                dir={isArabic(displayTitle) ? "rtl" : "ltr"}
               >
-                {blog.title}
+                {displayTitle}
               </h1>
               <p
-                className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 ${isArabic(blog.description) ? "text-right" : "text-left"}`}
-                dir={isArabic(blog.description) ? "rtl" : "ltr"}
+                className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 ${isArabic(displayDescription || '') ? "text-right" : "text-left"}`}
+                dir={isArabic(displayDescription || '') ? "rtl" : "ltr"}
               >
-                {blog.description}
+                {displayDescription}
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-gray-500 dark:text-gray-400 text-sm">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center">
-                    <span className="font-medium text-gray-700 dark:text-gray-200">{blog.author}</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">{displayAuthor}</span>
                   </div>
                   <span className="hidden sm:block">•</span>
                   <div className="flex items-center">
@@ -773,7 +789,7 @@ export default function BlogPostPage() {
                 </div>
                 
                 <button 
-                  onClick={() => sharePost(blog.title)}
+                  onClick={() => sharePost(displayTitle)}
                   className="flex items-center text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
                   aria-label="Share this article"
                 >
@@ -792,7 +808,7 @@ export default function BlogPostPage() {
               <div className="relative h-80 md:h-96 w-full">
                 <Image
                   src={blog.image?.startsWith("/uploads") ? `http://localhost:8080${blog.image}` : blog.image || ''}
-                  alt={blog.title}
+                  alt={displayTitle}
                   fill
                   className="object-cover"
                   priority
@@ -814,11 +830,11 @@ export default function BlogPostPage() {
                   transition={{ duration: 0.6, delay: 0.3 }}
                   className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-semibold prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl md:prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-ul:list-disc prose-ol:list-decimal prose-li:marker:text-gray-400 dark:prose-li:marker:text-gray-500 prose-a:text-blue-600 dark:prose-a:text-blue-400 hover:prose-a:text-blue-700 dark:hover:prose-a:text-blue-300 prose-a:no-underline hover:prose-a:underline prose-a:transition-colors prose-img:rounded-xl prose-img:shadow-lg"
                 >
-                      {renderContent(blog.content)}
+                      {renderContent(displayContent)}
                 </motion.article>
                 
                 {/* Tags */}
-                {blog.tags && blog.tags.length > 0 && (
+                {displayTags && displayTags.length > 0 && (
                   <motion.div 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -826,7 +842,7 @@ export default function BlogPostPage() {
                     className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"
                   >
                     <div className="flex flex-wrap gap-2">
-                      {blog.tags.map((tag: string, index: number) => (
+                      {displayTags.map((tag: string, index: number) => (
                         <span 
                           key={index}
                           className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors cursor-pointer"

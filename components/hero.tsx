@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { useLanguage } from "./language-provider"
 import { ArrowRight, TrendingUp, Shield, Zap, Sparkles } from "lucide-react"
 import { useState } from "react"
-import RegistrationModal from "./RegistrationModal"
+import RegistrationModal from "./RegistrationSection"
 
 export default function Hero() {
   const { t, currentLanguage } = useLanguage()
@@ -22,11 +22,8 @@ export default function Hero() {
     }
   }
 
-  const scrollToRegister = () => {
-    const element = document.getElementById("register");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
   return (
@@ -109,11 +106,11 @@ export default function Hero() {
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-900 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </button>
                 <button 
-                  onClick={scrollToRegister}
+                  onClick={openModal}
                   className="group relative px-8 py-4 border-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 font-semibold rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                 >
                   <span className="relative z-10 flex items-center justify-center">
-                    {t("hero.secondaryCta")}
+                    {t("hero.secondaryCta") || "Get Started"}
                   </span>
                 </button>
               </motion.div>
@@ -144,6 +141,12 @@ export default function Hero() {
       <motion.div 
         className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-gray-900 to-transparent z-10"
         style={{ y }}
+      />
+      
+      {/* Registration Modal */}
+      <RegistrationModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
       />
     </section>
   )
