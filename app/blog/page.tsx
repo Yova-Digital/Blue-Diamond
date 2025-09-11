@@ -45,7 +45,7 @@ export default function BlogPage() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/blogs');
+        const response = await fetch('https://api.bluediamond.ae/api/blogs');
         if (!response.ok) throw new Error('Failed to fetch blogs');
         const data = await response.json();
         // Filter out any unpublished blogs
@@ -102,7 +102,7 @@ export default function BlogPage() {
               <Card className="h-full hover:shadow-lg transition-shadow">
                 <div className="h-48 relative">
                   <Image
-                    src={blog.image?.startsWith("/uploads") ? `http://localhost:8080${blog.image}` : blog.image}
+                    src={blog.image?.startsWith("/uploads") ? `https://api.bluediamond.ae${blog.image}` : blog.image}
                     alt={displayTitle}
                     fill
                     className="object-cover"

@@ -519,7 +519,7 @@ export default function BlogPostPage() {
     // إذا لم توجد في الثابتة، ابحث في الباك اند
     const fetchBlog = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/blogs")
+        const res = await fetch("https://api.bluediamond.ae/api/blogs")
         const data = await res.json()
         const publishedBlogs = data.filter((b: any) => b.published).map((blog: Blog) => ({
           ...blog,
@@ -807,7 +807,7 @@ export default function BlogPostPage() {
             >
               <div className="relative h-80 md:h-96 w-full">
                 <Image
-                  src={blog.image?.startsWith("/uploads") ? `http://localhost:8080${blog.image}` : blog.image || ''}
+                  src={blog.image?.startsWith("/uploads") ? `https://api.bluediamond.ae${blog.image}` : blog.image || ''}
                   alt={displayTitle}
                   fill
                   className="object-cover"
@@ -880,7 +880,7 @@ export default function BlogPostPage() {
                     <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-lg dark:bg-gray-800/50 dark:border-gray-700">
                       <div className="relative h-48 overflow-hidden">
                         <Image
-                          src={post.image?.startsWith("/uploads") ? `http://localhost:8080${post.image}` : post.image || ''}
+                          src={post.image?.startsWith("/uploads") ? `https://api.bluediamond.ae${post.image}` : post.image || ''}
                           alt={post.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
