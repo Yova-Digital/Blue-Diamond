@@ -99,6 +99,7 @@ const FloatingTextarea = ({ id, label, value, onChange, placeholder, required = 
 // حذف ContactCard القديم واستبداله بمكون جديد للأيقونة فقط مع النسخ
 const ContactIcon = ({ icon: Icon, value, color, label }: { icon: any, value: string, color: string, label: string }) => {
   const [copied, setCopied] = useState(false);
+  const { t } = useLanguage();
 
   const handleCopy = async () => {
     try {
@@ -122,7 +123,7 @@ const ContactIcon = ({ icon: Icon, value, color, label }: { icon: any, value: st
       </button>
       {copied && (
         <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs rounded px-2 py-1 shadow-lg animate-fade-in-out z-20 whitespace-nowrap">
-          تم النسخ
+          {t('contact.copied') || 'تم النسخ'}
         </span>
       )}
     </div>
