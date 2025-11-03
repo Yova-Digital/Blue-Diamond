@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef, useState } from "react"
 import { useLanguage } from "./language-provider"
-import { Building, RefreshCw, Hammer, Briefcase, Handshake, Ship, RotateCcw, ArrowRight, ArrowUpRight } from "lucide-react"
+import { Building, RefreshCw, Hammer, Briefcase, Ship, RotateCcw, ArrowRight, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 
 const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
@@ -34,18 +34,10 @@ const ServiceCard = ({ service, index, isHovered, onHover }: any) => {
           />
           <div className={`absolute inset-0 ${service.color.replace('/80', '/40')} mix-blend-multiply`}></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-          {/* Icon Overlay */}
-          <div className={`
-            absolute -bottom-8 ${isRTL ? 'left-6' : 'right-6'} w-24 h-24 rounded-3xl flex items-center justify-center 
-            transition-all duration-700 ${isHovered === index ? 'bg-white text-blue-600 shadow-2xl scale-110' : `text-white ${service.color.replace('/80', '')}`}
-            shadow-2xl group-hover:shadow-2xl border-4 border-white/30 backdrop-blur-sm
-          `}>
-            <service.icon className={`w-12 h-12 transition-all duration-700 ${isHovered === index ? 'scale-110' : ''}`} />
-          </div>
         </div>
         
         {/* Content */}
-        <div className="relative z-10 p-8 pt-10 flex-1 flex flex-col">
+        <div className="relative z-10 p-8 flex-1 flex flex-col">
           {/* Title */}
           <h3 className={`
             text-2xl font-bold mb-4 leading-tight transition-colors duration-500
@@ -104,7 +96,7 @@ export default function Services() {
     {
       icon: Building,
       title: t("services.realEstate"),
-      description: t("services.realEstateDesc"),
+      description: t("services.realEstateShortDesc"),
       color: "from-blue-400/80 to-blue-500/80",
       slug: "real-estate",
       image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80"
@@ -112,7 +104,7 @@ export default function Services() {
     {
       icon: RefreshCw,
       title: t("services.refinancing"),
-      description: t("services.refinancingDesc"),
+      description: t("services.refinancingShortDesc"),
       color: "from-emerald-400/80 to-teal-500/80",
       slug: "refinancing",
       image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80"
@@ -120,7 +112,7 @@ export default function Services() {
     {
       icon: Hammer,
       title: t("services.construction"),
-      description: t("services.constructionDesc"),
+      description: t("services.constructionShortDesc"),
       color: "from-amber-400/80 to-orange-500/80",
       slug: "construction",
       image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
@@ -128,23 +120,15 @@ export default function Services() {
     {
       icon: Briefcase,
       title: t("services.corporate"),
-      description: t("services.corporateDesc"),
+      description: t("services.corporateShortDesc"),
       color: "from-purple-400/80 to-indigo-500/80",
       slug: "corporate",
       image: "https://images.unsplash.com/photo-1709400628079-5960a9f2ded6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Q29ycG9yYXRlJTIwRmluYW5jZSUyMCUyNiUyMFdvcmtpbmclMjBDYXBpdGFsJTIwRmFjaWxpdGllc3xlbnwwfHwwfHx8MA%3D%3D"
     },
     {
-      icon: Handshake,
-      title: t("services.acquisition"),
-      description: t("services.acquisitionDesc"),
-      color: "from-rose-400/80 to-pink-500/80",
-      slug: "acquisition",
-      image: "https://images.unsplash.com/photo-1618044733300-9472054094ee?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fEJ1c2luZXNzJTIwQWNxdWlzaXRpb24lMjBGaW5hbmNlfGVufDB8fDB8fHww"
-    },
-    {
       icon: Ship,
       title: t("services.trade"),
-      description: t("services.tradeDesc"),
+      description: t("services.tradeShortDesc"),
       color: "from-cyan-400/80 to-blue-500/80",
       slug: "trade",
       image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
@@ -152,7 +136,7 @@ export default function Services() {
     {
       icon: RotateCcw,
       title: t("services.restructuring"),
-      description: t("services.restructuringDesc"),
+      description: t("services.restructuringShortDesc"),
       color: "from-violet-400/80 to-purple-500/80",
       slug: "restructuring",
       image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"

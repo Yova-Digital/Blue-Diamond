@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { useTheme } from "next-themes"
 import { useLanguage } from "./language-provider"
-import { Moon, Sun, Menu, X, Globe } from "lucide-react"
+import { Moon, Sun, Menu, X, Globe, Gem } from "lucide-react"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -31,11 +31,40 @@ export default function Header() {
       className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-blue-200 dark:border-blue-800"
     >
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+        <div className={`flex items-center justify-between ${language === ('ar' as const) ? 'flex-row-reverse' : ''}`}>
+          {/* Left side - Mobile Menu Toggle for English OR Controls for Arabic */}
+          {language === ('en' as const) ? (
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+            >
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          ) : (
+            <div className="md:hidden flex items-center space-x-2">
+              <button
+                onClick={() => setLanguage(language === ("en" as const) ? ("ar" as const) : ("en" as const))}
+                className="flex items-center space-x-1 px-3 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+              >
+                <Globe className="w-4 h-4" />
+                <span className="text-sm">{t("nav.language")}</span>
+              </button>
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+              >
+                {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+            </div>
+          )}
+
           {/* Logo */}
-          <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center shadow-lg">
-              <div className="w-6 h-6 bg-white rounded-sm transform rotate-45"></div>
+          <motion.div 
+            whileHover={{ scale: 1.05 }} 
+            className="flex items-center space-x-2"
+          >
+            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-lg border border-gray-200 dark:border-gray-700">
+              <Gem className="w-6 h-6 text-blue-600" />
             </div>
             <div className="hidden md:block">
               <h1 className="text-xl font-bold text-gray-900 dark:text-white">Blue Diamond</h1>
@@ -44,7 +73,7 @@ export default function Header() {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className={`hidden md:flex items-center ${language === ('ar' as const) ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
             <button
               onClick={() => {
                 if (window.location.pathname === '/') {
@@ -83,31 +112,49 @@ export default function Header() {
             </button>
           </nav>
 
-          {/* Controls */}
-          <div className="flex items-center space-x-4">
-            {/* Language Toggle */}
+          {/* Right side - Controls for English OR Mobile Menu Toggle for Arabic */}
+          <div className={`flex items-center ${language === ('ar' as const) ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
+            {/* Language Toggle - Desktop only */}
             <button
-              onClick={() => setLanguage(language === "en" ? "ar" : "en")}
-              className="flex items-center space-x-1 px-3 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+              onClick={() => setLanguage(language === ("en" as const) ? ("ar" as const) : ("en" as const))}
+              className="hidden md:flex items-center space-x-1 px-3 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
             >
               <Globe className="w-4 h-4" />
               <span className="text-sm">{t("nav.language")}</span>
             </button>
 
-            {/* Theme Toggle */}
+            {/* Mobile controls for English OR Menu toggle for Arabic */}
+            {language === ('ar' as const) ? (
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="md:hidden p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+              >
+                {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            ) : (
+              <div className="md:hidden flex items-center space-x-2">
+                <button
+                  onClick={() => setLanguage(language === ("en" as const) ? ("ar" as const) : ("en" as const))}
+                  className="flex items-center space-x-1 px-3 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span className="text-sm">{t("nav.language")}</span>
+                </button>
+                <button
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+                >
+                  {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                </button>
+              </div>
+            )}
+
+            {/* Theme Toggle - Desktop only */}
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
+              className="hidden md:block p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors"
             >
               {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
-            >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>

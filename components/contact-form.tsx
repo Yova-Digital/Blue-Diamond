@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react"
 import { motion, useAnimation, useInView, Variants } from "framer-motion"
 import { useLanguage } from "./language-provider"
 import { Send, Phone, Mail, MapPin, MessageSquare, User, MailIcon, PhoneIcon } from "lucide-react"
+import emailjs from '@emailjs/browser'
 
 const FloatingInput = ({ id, label, type = "text", value, onChange, placeholder, icon: Icon, required = false }: any) => {
   const [isFocused, setIsFocused] = useState(false)
@@ -98,6 +99,7 @@ const FloatingTextarea = ({ id, label, value, onChange, placeholder, required = 
 // حذف ContactCard القديم واستبداله بمكون جديد للأيقونة فقط مع النسخ
 const ContactIcon = ({ icon: Icon, value, color, label }: { icon: any, value: string, color: string, label: string }) => {
   const [copied, setCopied] = useState(false);
+  const { t } = useLanguage();
 
   const handleCopy = async () => {
     try {
@@ -121,7 +123,7 @@ const ContactIcon = ({ icon: Icon, value, color, label }: { icon: any, value: st
       </button>
       {copied && (
         <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs rounded px-2 py-1 shadow-lg animate-fade-in-out z-20 whitespace-nowrap">
-          تم النسخ
+          {t('contact.copied') || 'تم النسخ'}
         </span>
       )}
     </div>
@@ -153,27 +155,48 @@ export default function ContactForm() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      // Send email using EmailJS
+      await emailjs.send(
+        'service_m77xks3', // Service ID
+        'template_7b036pg', // Template ID
+        {
+          fullName: formData.name, // Using name as fullName for template
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          date: new Date().toLocaleString(),
+        },
+        'WgosXKTCh0k4qROqR' // Replace with your actual public key
+      );
 
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: "",
-    })
-    setIsSubmitting(false)
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      })
 
-    // Show success message
-    const successEl = document.getElementById('success-message')
-    if (successEl) {
-      successEl.classList.remove('opacity-0', 'translate-y-4')
-      successEl.classList.add('opacity-100', 'translate-y-0')
+      // Show success message
+      const successEl = document.getElementById('success-message')
+      if (successEl) {
+        successEl.classList.remove('opacity-0', 'translate-y-4')
+        successEl.classList.add('opacity-100', 'translate-y-0')
 
-      setTimeout(() => {
-        successEl.classList.remove('opacity-100', 'translate-y-0')
-        successEl.classList.add('opacity-0', 'translate-y-4')
-      }, 3000)
+        setTimeout(() => {
+          successEl.classList.remove('opacity-100', 'translate-y-0')
+          successEl.classList.add('opacity-0', 'translate-y-4')
+        }, 3000)
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      // Show error message
+      alert(t('contact.errorMessage') || 'An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -261,7 +284,7 @@ export default function ContactForm() {
               />
               <ContactIcon
                 icon={Mail}
-                value={"info@bluediamond.ae"}
+                value={"ceo@bluediamond.ae"}
                 color="bg-emerald-500"
                 label={t("contact.emailLabel")}
               />

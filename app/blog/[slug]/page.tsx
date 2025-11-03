@@ -13,151 +13,43 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
 
-const blogs = [
-  {
-    slug: "how-to-secure-business-loans-uae",
-    title: "How to Secure Business Loans: A Step-by-Step Guide",
-    description: "A comprehensive guide to help you navigate the process of securing business loans in the UAE.",
-    date: "May 20, 2024",
-    readTime: 7,
-    author: "Finance Experts",
-    authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
-    category: "Loans",
-    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    content: `# How to Secure Business Loans in the UAE: A Step-by-Step Guide
+// Define the interface for a blog post
+interface Blog {
+  _id?: string;
+  slug: string;
+  title: string;
+  titleAr?: string;
+  description: string;
+  excerpt?: string;
+  excerptAr?: string;
+  date: string;
+  author: string;
+  authorAr?: string;
+  category: string;
+  categoryAr?: string;
+  readTime: number;
+  image?: string;
+  authorImage?: string;
+  comments?: number;
+  content: string;
+  contentAr?: string;
+  tags: string[];
+  tagsAr?: string[];
+  published?: boolean;
+}
 
-Securing a business loan in the UAE can be a straightforward process when you understand the requirements and prepare accordingly. This comprehensive guide will walk you through each step to increase your chances of approval.
-
-## Understanding Business Loan Options in the UAE
-
-### 1. Types of Business Loans Available
-- **Term Loans**: Fixed amount with regular repayments
-- **Working Capital Loans**: For daily operational expenses
-- **Equipment Financing**: Specifically for purchasing business equipment
-- **Commercial Mortgages**: For property purchases
-- **Islamic Financing**: Sharia-compliant financing options
-
-### 2. Eligibility Criteria
-- Minimum business operating period (usually 6-12 months)
-- Minimum annual revenue requirements
-- Business plan and financial projections
-- Personal and business credit history
-
-## Step 1: Assess Your Business Needs
-
-### Determine Loan Purpose
-- Clearly define how you'll use the funds
-- Calculate the exact amount needed
-- Consider the loan tenure that suits your cash flow
-
-### Evaluate Your Financial Position
-- Review your credit score
-- Prepare financial statements
-- Calculate your debt-to-income ratio
-
-## Step 2: Prepare Required Documentation
-
-### Business Documents
-- Trade license copy
-- Memorandum of Association (MOA)
-- Chamber of Commerce registration
-- Bank statements (6-12 months)
-- Audited financial statements
-
-### Personal Documents
-- Passport and visa copies
-- Emirates ID
-- Personal bank statements
-- Proof of address
-
-## Step 3: Compare Lenders
-
-### Traditional Banks
-- Lower interest rates
-- Stringent requirements
-- Longer processing times
-
-### Digital Lenders
-- Faster approval process
-- More flexible requirements
-- Potentially higher interest rates
-
-### Government-Backed Programs
-- Khalifa Fund for Enterprise Development
-- Mohammed Bin Rashid Fund for SME
-- Dubai SME 100
-
-## Step 4: Submit Your Application
-
-### Complete the Application Form
-- Provide accurate information
-- Double-check all details
-- Include all required documents
-
-### Prepare for the Interview
-- Be ready to discuss your business plan
-- Explain how you'll use the loan
-- Demonstrate repayment capability
-
-## Step 5: Understand the Terms
-
-### Key Loan Terms to Review
-- Interest rates (fixed vs. variable)
-- Repayment schedule
-- Processing fees and other charges
-- Prepayment penalties
-- Collateral requirements
-
-## Step 6: Loan Disbursement
-
-### After Approval
-- Review the loan agreement carefully
-- Understand all terms and conditions
-- Sign the agreement
-- Receive funds in your business account
-
-## Tips for Improving Approval Chances
-
-### Build a Strong Credit Profile
-- Maintain good credit history
-- Pay existing loans on time
-- Keep credit utilization low
-
-### Strengthen Your Application
-- Prepare a solid business plan
-- Show consistent revenue
-- Offer collateral if possible
-- Maintain a good banking relationship
-
-## Common Mistakes to Avoid
-
-### Application Errors
-- Incomplete applications
-- Inaccurate information
-- Missing documents
-- Not checking credit report beforehand
-
-### Financial Mistakes
-- Applying for too much or too little
-- Not comparing multiple offers
-- Ignoring the fine print
-- Taking on more debt than you can handle
-
-## Conclusion
-
-Securing a business loan in the UAE requires careful planning and preparation. By following these steps and presenting a strong application, you can significantly improve your chances of approval. Remember to borrow responsibly and ensure that the loan terms align with your business's financial capabilities and growth plans.`,
-    tags: ["Business Loans", "UAE", "Financing", "SME"]
-  },
+// أضف مصفوفة التدوينات الثابتة blogsEn هنا
+const blogsEn = [
   {
     slug: "future-of-corporate-finance-uae",
     title: "The Future of Corporate Finance in the UAE",
     description: "Explore the latest trends and opportunities shaping the financial landscape for businesses in the UAE.",
     date: "June 1, 2024",
-    readTime: 7,
     author: "Blue Diamond Team",
-    authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
     category: "Finance",
+    readTime: 5,
     image: "https://images.unsplash.com/photo-1554224155-3a58922a22c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2065&q=80",
+    comments: 12,
     content: `# The Future of Corporate Finance in the UAE
 
 The United Arab Emirates continues to be a global hub for business and finance, with corporate finance practices evolving rapidly to meet the demands of a dynamic economic landscape. This article explores the key trends and innovations shaping the future of corporate finance in the UAE.
@@ -608,81 +500,51 @@ const isArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
 
 export default function BlogPostPage() {
   const { slug } = useParams()
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const router = useRouter()
 
-  const blog = blogs.find((b) => b.slug === slug)
+  const [blog, setBlog] = useState<Blog | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [allBlogs, setAllBlogs] = useState<Blog[]>([])
 
-  if (!blog) {
-    return (
-      <main className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-        <section className="pt-40 pb-20 text-center px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-2xl mx-auto"
-          >
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">Post Not Found</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">The blog post you're looking for doesn't exist or has been moved.</p>
-            <Button 
-              onClick={() => router.push('/blog')} 
-              className="group px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" /> 
-              {t("blog.back") || "Back to Blog"}
-            </Button>
-          </motion.div>
-        </section>
-      </main>
-    )
-  }
+  useEffect(() => {
+    // ابحث أولاً في blogsEn
+    const staticBlog = blogsEn.find(b => b.slug === slug)
+    if (staticBlog) {
+      setBlog(staticBlog)
+      setAllBlogs(blogsEn)
+      setLoading(false)
+      return
+    }
+    // إذا لم توجد في الثابتة، ابحث في الباك اند
+    const fetchBlog = async () => {
+      try {
+        const res = await fetch("https://api.bluediamond.ae/api/blogs")
+        const data = await res.json()
+        const publishedBlogs = data.filter((b: any) => b.published).map((blog: Blog) => ({
+          ...blog,
+          slug: blog.slug || (blog.title ? blog.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '') : undefined),
+        }));
+        setAllBlogs([...blogsEn, ...publishedBlogs])
+        const found = publishedBlogs.find((b: Blog) => b.slug === slug)
+        setBlog(found || null)
+      } catch (err) {
+        setBlog(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchBlog()
+  }, [slug])
 
-  // State for table of contents
-  const [headings, setHeadings] = useState<{id: string, text: string, level: number}[]>([]);
-  const [activeId, setActiveId] = useState<string>('');
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [progress, setProgress] = useState(0);
   const [comment, setComment] = useState('');
   const [showComments, setShowComments] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Generate table of contents from headings
+  // Set up scroll progress
   useEffect(() => {
-    if (contentRef.current) {
-      const elements = Array.from(contentRef.current.querySelectorAll('h2, h3'));
-      const headingsList = elements.map((element) => ({
-        id: element.id || element.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '') || '',
-        text: element.textContent || '',
-        level: parseInt(element.tagName.substring(1))
-      }));
-      setHeadings(headingsList);
-      
-      // Add IDs to headings for anchor links
-      elements.forEach((element, index) => {
-        if (!element.id) {
-          element.id = `section-${index}`;
-        }
-      });
-    }
-    
-    // Set up intersection observer for active TOC item highlighting
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-            setActiveId(entry.target.id);
-          }
-        });
-      },
-      { threshold: [0, 0.5, 1.0], rootMargin: '0px 0px -50% 0px' }
-    );
-
-    // Observe all headings
-    const headings = document.querySelectorAll('h2, h3');
-    headings.forEach((heading) => observer.observe(heading));
-
-    // Set up scroll progress
     const handleScroll = () => {
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -693,21 +555,10 @@ export default function BlogPostPage() {
 
     window.addEventListener('scroll', handleScroll);
     return () => {
-      observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [blog.content]);
+  }, []);
 
-  // Scroll to section
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 100,
-        behavior: 'smooth'
-      });
-    }
-  };
 
   // Handle comment submission
   const handleCommentSubmit = (e: React.FormEvent) => {
@@ -811,12 +662,49 @@ export default function BlogPostPage() {
     });
   };
 
-  // Get related posts (excluding current post)
-  const relatedPosts = blogs
-    .filter(b => b.slug !== slug)
-    .slice(0, 2);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
 
-  const articleDir = isArabic(blog.title) ? "rtl" : "ltr";
+  if (!blog) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+        <section className="pt-40 pb-20 text-center px-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">Post Not Found</h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">The blog post you're looking for doesn't exist or has been moved.</p>
+          <Button 
+            onClick={() => router.push('/blog')} 
+            className="group px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" /> 
+            {t("blog.back") || "Back to Blog"}
+          </Button>
+        </section>
+      </main>
+    )
+  }
+
+  // هنا فقط أصبح blog !== null
+  const relatedPosts = allBlogs
+    .filter(b =>
+      (b._id && blog._id ? b._id !== blog._id : true) &&
+      b.slug !== blog.slug
+    )
+    .slice(0, 2);
+  
+  // Get content based on language preference
+  const displayTitle = language === 'ar' && blog.titleAr ? blog.titleAr : blog.title;
+  const displayDescription = language === 'ar' && blog.excerptAr ? blog.excerptAr : (blog.description || blog.excerpt);
+  const displayContent = language === 'ar' && blog.contentAr ? blog.contentAr : blog.content;
+  const displayAuthor = language === 'ar' && blog.authorAr ? blog.authorAr : blog.author;
+  const displayCategory = language === 'ar' && blog.categoryAr ? blog.categoryAr : blog.category;
+  const displayTags = language === 'ar' && blog.tagsAr ? blog.tagsAr : blog.tags;
+  
+  const articleDir = isArabic(displayTitle) ? "rtl" : "ltr";
 
   return (
     <AnimatePresence>
@@ -868,32 +756,25 @@ export default function BlogPostPage() {
             >
               <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-sm font-medium mb-6">
                 <Tag className="w-3.5 h-3.5 mr-1.5" />
-                {blog.category}
+                {displayCategory}
               </div>
               <h1
-                className={`text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6 ${isArabic(blog.title) ? "text-right" : "text-left"}`}
-                dir={isArabic(blog.title) ? "rtl" : "ltr"}
+                className={`text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6 ${isArabic(displayTitle) ? "text-right" : "text-left"}`}
+                dir={isArabic(displayTitle) ? "rtl" : "ltr"}
               >
-                {blog.title}
+                {displayTitle}
               </h1>
               <p
-                className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 ${isArabic(blog.description) ? "text-right" : "text-left"}`}
-                dir={isArabic(blog.description) ? "rtl" : "ltr"}
+                className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 ${isArabic(displayDescription || '') ? "text-right" : "text-left"}`}
+                dir={isArabic(displayDescription || '') ? "rtl" : "ltr"}
               >
-                {blog.description}
+                {displayDescription}
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-gray-500 dark:text-gray-400 text-sm">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center">
-                    <div className="w-8 h-8 rounded-full overflow-hidden mr-3 border-2 border-white dark:border-gray-700 shadow">
-                      <img 
-                        src={blog.authorImage || '/placeholder-user.jpg'} 
-                        alt={blog.author}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <span className="font-medium text-gray-700 dark:text-gray-200">{blog.author}</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">{displayAuthor}</span>
                   </div>
                   <span className="hidden sm:block">•</span>
                   <div className="flex items-center">
@@ -908,7 +789,7 @@ export default function BlogPostPage() {
                 </div>
                 
                 <button 
-                  onClick={() => sharePost(blog.title)}
+                  onClick={() => sharePost(displayTitle)}
                   className="flex items-center text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
                   aria-label="Share this article"
                 >
@@ -926,8 +807,8 @@ export default function BlogPostPage() {
             >
               <div className="relative h-80 md:h-96 w-full">
                 <Image
-                  src={blog.image}
-                  alt={blog.title}
+                  src={blog.image?.startsWith("/uploads") ? `https://api.bluediamond.ae${blog.image}` : blog.image || ''}
+                  alt={displayTitle}
                   fill
                   className="object-cover"
                   priority
@@ -942,43 +823,18 @@ export default function BlogPostPage() {
         {/* Article Content */}
         <section className="relative py-12 md:py-16 bg-white dark:bg-gray-900">
           <div className="container mx-auto px-4 max-w-6xl">
-            <div className="flex flex-col lg:flex-row gap-8">
-              {/* Table of Contents */}
-              {headings.length > 0 && (
-                <div className="lg:w-64 flex-shrink-0 hidden lg:block">
-                  <div className="sticky top-24">
-                    <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 px-2">ON THIS PAGE</div>
-                    <nav className="space-y-2 border-l border-gray-200 dark:border-gray-700 pl-4">
-                      {headings.map((heading) => (
-                        <button
-                          key={heading.id}
-                          onClick={() => scrollToSection(heading.id)}
-                          className={`block text-left w-full px-3 py-1.5 text-sm rounded-md transition-colors ${
-                            activeId === heading.id
-                              ? 'text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/30'
-                              : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50'
-                          } ${heading.level === 3 ? 'pl-6 text-sm' : 'pl-3 font-medium'}`}
-                        >
-                          {heading.text}
-                        </button>
-                      ))}
-                    </nav>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex-1">
+            <div className="w-full max-w-4xl mx-auto">
                 <motion.article 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
                   className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-semibold prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl md:prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-ul:list-disc prose-ol:list-decimal prose-li:marker:text-gray-400 dark:prose-li:marker:text-gray-500 prose-a:text-blue-600 dark:prose-a:text-blue-400 hover:prose-a:text-blue-700 dark:hover:prose-a:text-blue-300 prose-a:no-underline hover:prose-a:underline prose-a:transition-colors prose-img:rounded-xl prose-img:shadow-lg"
                 >
-                      {renderContent(blog.content)}
+                      {renderContent(displayContent)}
                 </motion.article>
                 
                 {/* Tags */}
-                {blog.tags && blog.tags.length > 0 && (
+                {displayTags && displayTags.length > 0 && (
                   <motion.div 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -986,7 +842,7 @@ export default function BlogPostPage() {
                     className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"
                   >
                     <div className="flex flex-wrap gap-2">
-                      {blog.tags.map((tag, index) => (
+                      {displayTags.map((tag: string, index: number) => (
                         <span 
                           key={index}
                           className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors cursor-pointer"
@@ -998,9 +854,7 @@ export default function BlogPostPage() {
                     </div>
                   </motion.div>
                 )}
-
               </div>
-            </div>
           </div>
         </section>
 
@@ -1016,7 +870,7 @@ export default function BlogPostPage() {
               <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                 {relatedPosts.map((post, index) => (
                   <motion.article 
-                    key={post.slug}
+                    key={post._id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -1026,7 +880,7 @@ export default function BlogPostPage() {
                     <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-lg dark:bg-gray-800/50 dark:border-gray-700">
                       <div className="relative h-48 overflow-hidden">
                         <Image
-                          src={post.image}
+                          src={post.image?.startsWith("/uploads") ? `https://api.bluediamond.ae${post.image}` : post.image || ''}
                           alt={post.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
